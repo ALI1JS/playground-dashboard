@@ -1,12 +1,12 @@
-import './App.css'
+import Login from './components/login/login'
 
 function App() {
 
   return (
     <>
      
-        <div className='w-[100px] bg-black'>
-            <h2>welcome</h2>
+        <div className='w-[100vw] h-[100vh]'>
+           <Login/>
         </div>
     </>
   )
