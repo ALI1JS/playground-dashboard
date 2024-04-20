@@ -1,13 +1,16 @@
-import Login from './components/login/login'
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import { routers } from "./route";
+
+
+
+
+const Router = createBrowserRouter(routers)
 
 function App() {
 
   return (
     <>
-     
-        <div className='w-[100vw] h-[100vh]'>
-           <Login/>
-        </div>
+       <RouterProvider router={Router}/>
     </>
   )
 }

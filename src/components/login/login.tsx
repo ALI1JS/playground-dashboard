@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import UserType from "../../types/user.type";
+import {UserType} from "../../types/user.type";
 import Input from "./input.comp";
 
 
