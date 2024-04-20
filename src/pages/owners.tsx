@@ -17,9 +17,6 @@ const OwnersDidpaly: React.FC = () => {
         setNavbarIsDisplay(bool);
     }
 
-    const deleteHandle = () => {
-        console.log("deleted")
-    }
     const viewHandle = () => {
         console.log("view")
     }

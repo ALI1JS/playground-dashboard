@@ -2,11 +2,6 @@ import React, { useState } from "react";
 import Navbar from "../components/navbar/navbar.com";
 import Nav from "../components/nav/nav.comp";
 import humbrgerBar from "../assets/menu-icon.png";
-import avatar from "../assets/2151005751.jpg";
-import TableHead from "../components/table/head.comp";
-import OwnerRow from "../components/table/row.comp";
-import { useAuth } from "../context/authContext";
-import RevenueChart from "../components/charts/revenue-charts.comp";
 import DisplayNumbers from "../components/numberCart/number-cart";
 import Footer from "../components/footer/footer.comp";
 import OwnerBasicInfo from "../components/owners/owner-basicinfo.comp";
@@ -18,16 +13,11 @@ import Feedback from "../components/owners/clients-feedback.comp";
 
 const OwnerDetailsPage: React.FC = () => {
 
-    const { user } = useAuth()
 
     const [navbarIsHidden, setNavbarIsHidden] = useState(true);
 
     const navbarDisplayHandle = (bool: boolean) => {
         setNavbarIsHidden(bool);
-    }
-
-    const deleteHandle = () => {
-        console.log("deleted");
     }
 
     return (

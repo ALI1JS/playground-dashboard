@@ -6,11 +6,7 @@ import TableHead from "../table/head.comp";
 
 const OwnerView: React.FC = () => {
 
-    const deleteHandle = () => {
-        console.log("deleted")
-    }
 
-    const getOwners = ()=>{}
     const viewHandle = () => {
         console.log("dispaly")
     }
