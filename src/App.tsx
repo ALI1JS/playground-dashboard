@@ -1,6 +1,6 @@
-import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { routers } from "./route";
-
+import { OwnersProvider } from "./context/ownersContext";
 
 
 
@@ -10,7 +10,10 @@ function App() {
 
   return (
     <>
-       <RouterProvider router={Router}/>
+      <OwnersProvider>
+
+        <RouterProvider router={Router} />
+      </OwnersProvider>
     </>
   )
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import Navbar from "../components/navbar/navbar.com";
 import DisplayNumbers from "../components/numberCart/number-cart";
 import ChartComponent from "../components/charts/owners-chrts.comp";
@@ -7,17 +7,31 @@ import OwnerView from "../components/owners/owners.viewcomp";
 import Nav from "../components/nav/nav.comp";
 import humbrgerBar from "../assets/menu-icon.png";
 import Footer from "../components/footer/footer.comp";
+import axios from "axios";
+import { OwnersContext } from "../context/ownersContext";
 
 
 
 const Dashboard: React.FC = () => {
 
      const [navbarIsHidden, setNavbarIsHidden] = useState(true);
-
+     const {storeOwners} = useContext(OwnersContext);
      const navbarDisplayHandle = (bool: boolean) => {
           setNavbarIsHidden(bool);
      }
 
+     useEffect( ()=>{
+
+          const fetchOwners = async()=>{
+
+               const ownersBasicInfo = await axios.get('/api/owners/basic-info');
+               console.log(ownersBasicInfo.data);
+               storeOwners(ownersBasicInfo.data);
+          }
+
+          fetchOwners();
+     }, [storeOwners])
+     
      return (
           <div className="flex gap-5 w-[100vw] min-h-[100vh] relative">
                <div className="w-8 h-8 ml-5 absolute mt-10 cursor-pointer xl:hidden">
@@ -37,7 +51,7 @@ const Dashboard: React.FC = () => {
                               <RevenueChart />
                          </div>
 
-                         <OwnerView />
+                            <OwnerView />
 
                          <Footer />
 

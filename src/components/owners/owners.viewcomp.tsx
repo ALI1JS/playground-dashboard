@@ -1,15 +1,21 @@
-import React from "react";
+import React , {useContext} from "react";
 import OwnerRow from "../table/row.comp";
 import TableHead from "../table/head.comp";
-
+import { OwnersContext } from "../../context/ownersContext";
 
 
 const OwnerView: React.FC = () => {
-
+     
+    const {latestTenOwners} = useContext(OwnersContext);
 
     const viewHandle = () => {
         console.log("dispaly")
     }
+
+    if (!Array.isArray(latestTenOwners)) {
+        // Handle case when latestTenOwners isn't an array (e.g., loading or error state)
+        return <div>Loading...</div>; // You can adjust this based on your context
+      }
 
     return (
         <div className="container mx-auto bg-white rounded py-3">
@@ -18,14 +24,12 @@ const OwnerView: React.FC = () => {
                 <table className="table-auto min-w-full">
                     <TableHead label1="name" label2="email" label3="Phone" label4="Location" label5="Price / Hour" label6="Clients Number" label7="Actions" />
                     <tbody className="bg-white divide-y divide-gray-200">
+                     {
+                        latestTenOwners.map((owner)=>(
 
-                    <OwnerRow id="1" label1="ALI" label2="aliismailh08@gmail.com" label3="01120450953" label4="Minya" label5={100} label6={200}  view={viewHandle} />
-                    <OwnerRow id="2" label1="ALI" label2="aliismailh08@gmail.com" label3="01120450953" label4="Minya" label5={100} label6={200}  view={viewHandle} />
-                    <OwnerRow id="3" label1="ALI" label2="aliismailh08@gmail.com" label3="01120450953" label4="Minya" label5={100} label6={200}  view={viewHandle} />
-                    <OwnerRow id="4" label1="ALI" label2="aliismailh08@gmail.com" label3="01120450953" label4="Minya" label5={100} label6={200}  view={viewHandle} />
-                    <OwnerRow id="5" label1="ALI" label2="aliismailh08@gmail.com" label3="01120450953" label4="Minya" label5={100} label6={200}  view={viewHandle} />
-                    <OwnerRow id="6" label1="ALI" label2="aliismailh08@gmail.com" label3="01120450953" label4="Minya" label5={100} label6={200}  view={viewHandle} />
-                    <OwnerRow id="7" label1="ALI" label2="aliismailh08@gmail.com" label3="01120450953" label4="Minya" label5={100} label6={200}  view={viewHandle} />
+                            <OwnerRow key={owner.id} id={owner.id} label1={owner.name} label2={owner.email} label3={owner.phone} label4={owner.location} label5={100} label6={200}  view={viewHandle} />
+                        ))
+                     }
                        
                     </tbody>
                 </table>

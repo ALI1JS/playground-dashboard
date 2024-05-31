@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import avatar from "../../assets/2151005751.jpg";
-import { useAuth } from "../../context/authContext";
 
 const Nav: React.FC = () => {
 
     const [catogeryDispaly, setcatogeryDispaly] = useState(false);
-    const {user} = useAuth()
    
     const displayCatogeiesHandle = ()=>{
         setcatogeryDispaly(!catogeryDispaly);
@@ -30,7 +28,7 @@ const Nav: React.FC = () => {
 
             <div className="flex flex-col gap-2 font-bold items-center mr-10 xl:mr-0">
                 <img src={avatar} alt="admin-image" className="w-12 h-12 rounded-full cursor-pointer" />
-                <span>{user.username}</span>
+                <span>ALI</span>
             </div>
 
         </div>

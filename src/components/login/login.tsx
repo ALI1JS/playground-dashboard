@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import {UserType} from "../../types/user.type";
 import Input from "./input.comp";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 
 const Login: React.FC<UserType> = () => {
 
-    const [userData, setUserData] = useState<UserType>({ username: '', password: '' });
-    const [errors, setErrors] = useState<UserType>({ username: '', password: '' });
+    const [userData, setUserData] = useState<UserType>({ email: '', password: '' });
+    const [errors, setErrors] = useState<UserType>({ email: '', password: '' });
     const [resetPassword, setResetPassword] = useState<boolean>(false);
     const [checkEmailMsg, setcheckEmailMsg] = useState<boolean>(false);
+    const navigate = useNavigate();
 
 
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -18,28 +21,34 @@ const Login: React.FC<UserType> = () => {
     }
 
 
-    const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         // Implement your login logic here, e.g., calling an API
-        if (!userData.username || !userData.password || errors.username || errors.password) {
+        if (!userData.email || !userData.password || errors.email || errors.password) {
             console.error('Form validation errors:', errors);
             return; // Stop submission if there are errors
         }
-        console.log('Login attempt:', userData);
-        
+       //const response = await axios.post('http://abdoo120-001-site1.ctempurl.com/api/Admin/Login', userData);
+
+       if (true) {
+        navigate('/dashboard'); // Redirect to the home page
+    } else {
+        console.error('Login failed:');
+        // You can show an error message to the user here
+    }
     };
 
     const resetPassSubmit = (e: React.FormEvent<HTMLFormElement>):void =>{
         e.preventDefault();
         
-        if (!userData.username || errors.username ) {
-            console.error('Form validation errors:', errors.username);
+        if (!userData.email || errors.email ) {
+            console.error('Form validation errors:', errors.email);
             return; // Stop submission if there are errors
         }
 
          setcheckEmailMsg(true);
         // Implement your login logic here, e.g., calling an API
-        console.log('Login attempt:', userData.username);
+        console.log('Login attempt:', userData.email);
 
         // return to Login Component after some minutes
 
@@ -81,7 +90,7 @@ const Login: React.FC<UserType> = () => {
                         <form onSubmit={handleLogin}>
                             <div className="mt-4">
 
-                                <Input type="text" name="username" label="usernamOrEmail" value={userData.username} handleOnChange={handleOnChange} error={errors.username}/>
+                                <Input type="text" name="email" label="usernamOrEmail" value={userData.email} handleOnChange={handleOnChange} error={errors.email}/>
                                 <Input type="password" name="password" label="password" value={userData.password} handleOnChange={handleOnChange} error={errors.password}/>
                                 <div className="flex items-baseline justify-between">
                                     <button type="submit" className="px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900">Login</button>
@@ -96,7 +105,7 @@ const Login: React.FC<UserType> = () => {
                  resetPassword &&
                  <form onSubmit={resetPassSubmit}>
                    {checkEmailMsg && <p className="text-black text-whrite text-md font-bold mt-1">check your email to Rest your password</p>}
-                 <Input type="text" name="username" label="usernamOrEmail" value={userData.username} handleOnChange={handleOnChange} error={errors.username}/>
+                 <Input type="text" name="username" label="usernamOrEmail" value={userData.email} handleOnChange={handleOnChange} error={errors.email}/>
                  <button type="submit" className="px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900">Login</button>
              </form>
 
