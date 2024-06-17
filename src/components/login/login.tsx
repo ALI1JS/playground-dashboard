@@ -1,17 +1,20 @@
 import React, { useState } from "react";
-import {UserType} from "../../types/user.type";
+import { UserType } from "../../types/user.type";
 import Input from "./input.comp";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useAdmin } from "../../context/adminContext";
 
 
 const Login: React.FC<UserType> = () => {
 
-    const [userData, setUserData] = useState<UserType>({ email: '', password: '' });
+    const [adminLoginData, setUserData] = useState<UserType>({ email: '', password: '' });
     const [errors, setErrors] = useState<UserType>({ email: '', password: '' });
     const [resetPassword, setResetPassword] = useState<boolean>(false);
     const [checkEmailMsg, setcheckEmailMsg] = useState<boolean>(false);
     const navigate = useNavigate();
+    const { setAdmin } = useAdmin();
 
 
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -19,40 +22,66 @@ const Login: React.FC<UserType> = () => {
         setUserData(prevState => ({ ...prevState, [name]: value }))
         validateField(name, value);
     }
-
-
+    /**
+     * 
+     * hawihubsa@gmail.com
+     *  Hawi@2030
+     */
+    
     const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        // Implement your login logic here, e.g., calling an API
-        if (!userData.email || !userData.password || errors.email || errors.password) {
-            console.error('Form validation errors:', errors);
-            return; // Stop submission if there are errors
-        }
-       //const response = await axios.post('http://abdoo120-001-site1.ctempurl.com/api/Admin/Login', userData);
-
-       if (true) {
-        navigate('/dashboard'); // Redirect to the home page
-    } else {
-        console.error('Login failed:');
-        // You can show an error message to the user here
-    }
-    };
-
-    const resetPassSubmit = (e: React.FormEvent<HTMLFormElement>):void =>{
-        e.preventDefault();
+      event.preventDefault();
+    
+      // Validate form fields
+      if (!adminLoginData.email || !adminLoginData.password || errors.email || errors.password) {
+        return; // Stop submission if there are errors
+      }
+    
+      try {
+        const response = await axios.post('http://abdoo120-001-site1.ctempurl.com/api/Admin/Login', adminLoginData);
         
-        if (!userData.email || errors.email ) {
+        if (response.status === 200) {
+          console.log(response.data)
+          setAdmin({ username: response.data.userName, wallet: response.data.wallet });
+          sessionStorage.setItem('adminEmail', response.data.email)
+          toast.success('Login Successfully');
+          navigate('/dashboard');
+        }
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+         
+          if (error.response) {
+            if (error.response.status === 404) {
+              toast.error('Invalid email or password.');
+            } else {
+              toast.error(`Error: ${error.response.statusText}`);
+            }
+          } else if (error.request) {
+            toast.error('No response received from server.');
+          } else {
+            toast.error(`Error: ${error.message}`);
+          }
+        } else {
+          toast.error('An unexpected error occurred.');
+        }
+      }
+    };
+    
+
+    const resetPassSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+        e.preventDefault();
+
+        if (!adminLoginData.email || errors.email) {
             console.error('Form validation errors:', errors.email);
             return; // Stop submission if there are errors
         }
 
-         setcheckEmailMsg(true);
+        setcheckEmailMsg(true);
         // Implement your login logic here, e.g., calling an API
-        console.log('Login attempt:', userData.email);
+        console.log('Login attempt:', adminLoginData.email);
 
         // return to Login Component after some minutes
 
-        setTimeout(()=>{
+        setTimeout(() => {
             setResetPassword(false);
         }, 3000)
 
@@ -65,11 +94,10 @@ const Login: React.FC<UserType> = () => {
         } else if (name === 'password' && value.length < 8) {
             errMsg = 'Password must be at least 8 characters long.';
         }
-        else if (name === "username")
-        {
+        else if (name === "username") {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(value)) {
-              errMsg = 'Invalid email format.';
+                errMsg = 'Invalid email format.';
             }
         }
 
@@ -90,8 +118,8 @@ const Login: React.FC<UserType> = () => {
                         <form onSubmit={handleLogin}>
                             <div className="mt-4">
 
-                                <Input type="text" name="email" label="usernamOrEmail" value={userData.email} handleOnChange={handleOnChange} error={errors.email}/>
-                                <Input type="password" name="password" label="password" value={userData.password} handleOnChange={handleOnChange} error={errors.password}/>
+                                <Input type="text" name="email" label="usernamOrEmail" value={adminLoginData.email} handleOnChange={handleOnChange} error={errors.email} />
+                                <Input type="password" name="password" label="password" value={adminLoginData.password} handleOnChange={handleOnChange} error={errors.password} />
                                 <div className="flex items-baseline justify-between">
                                     <button type="submit" className="px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900">Login</button>
                                     <a onClick={resetPasswordHandle} className="text-sm text-blue-600 hover:underline cursor-pointer">Forgot password?</a>
@@ -101,16 +129,16 @@ const Login: React.FC<UserType> = () => {
                     </>
 
                 }
-               {
-                 resetPassword &&
-                 <form onSubmit={resetPassSubmit}>
-                   {checkEmailMsg && <p className="text-black text-whrite text-md font-bold mt-1">check your email to Rest your password</p>}
-                 <Input type="text" name="username" label="usernamOrEmail" value={userData.email} handleOnChange={handleOnChange} error={errors.email}/>
-                 <button type="submit" className="px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900">Login</button>
-             </form>
+                {
+                    resetPassword &&
+                    <form onSubmit={resetPassSubmit}>
+                        {checkEmailMsg && <p className="text-black text-whrite text-md font-bold mt-1">check your email to Rest your password</p>}
+                        <Input type="text" name="username" label="usernamOrEmail" value={adminLoginData.email} handleOnChange={handleOnChange} error={errors.email} />
+                        <button type="submit" className="px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900">Login</button>
+                    </form>
 
-               }
-                
+                }
+
 
             </div>
         </div>

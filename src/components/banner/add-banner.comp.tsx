@@ -1,21 +1,28 @@
-import React from "react";
-import Input from "../login/input.comp";
-import addBanner from "../../assets/plus-icon.png";
+import React, { useState } from "react";
+import plusIcon from "../../assets/plus-icon.png";
+import BannerForm from "./add-banner-form";
 
 
-const AddBanner:React.FC = () => {
+const AddCatoggery: React.FC = () => {
+
+    const [isHidden, setIsHidden] = useState(true);
+
+
+    const addCatogeryHandle = (bool: boolean) => {
+        setIsHidden(bool);
+    }
 
     return (
-        <div className="flex gap-3 mt-3">
-            <img className="w-5 h-5" src={addBanner} alt="add-banner"/>
-                <Input type="file" name="file" accept="image/*" label="Add Banner"
-                    isHidden="hidden" rounded="rounded" textColor="black" font="font-bold"
-                    pointer="cursor-pointer"
-                />
-
+        <div>
+            <div onClick={() => { addCatogeryHandle(false) }} className="flex items-center cursor-pointer">
+                <img className="w-5 h-5" src={plusIcon} alt="plus-icon" />
+                <button className="px-4 py-3 font-bold text-slate-500">Add Banner</button>
+            </div>
+             <BannerForm isHidden={isHidden} addBannerHandle={()=>{addCatogeryHandle(true)}}/>
+              
         </div>
     )
 }
 
 
-export default AddBanner;
+export default AddCatoggery;

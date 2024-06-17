@@ -1,14 +1,18 @@
-// src/context/OwnersContext.tsx
-import React, { createContext, useState, ReactNode } from 'react';
+import { createContext, useState, ReactNode, useEffect } from 'react';
+import axios from 'axios';
 
 // Define the Owner interface
 interface Owner {
-  id: string;
-  name: string;
-  email: string,
-  phone: string,
-  location: string
-  // Add additional fields as needed
+  ownerId: string;
+  userName: string;
+  email: string;
+  proofOfIdentityUrl?: string;
+  phone?: string;
+  location?: string;
+  profilePictureUrl?: string;
+  wallet?: number;
+  rate?: number;
+  review?: [];
 }
 
 // Define the context type
@@ -16,9 +20,11 @@ interface OwnersContextType {
   owners: Owner[];
   displayedOwners: Owner[];
   currentPage: number;
-  latestTenOwners: Owner[],
+  latestTenOwners: Owner[];
+  totalOwners: number;
   loadMoreOwners: () => void;
   storeOwners: (newOwners: Owner[]) => void;
+  fetchOwners: () => void;
 }
 
 // Default values for the context
@@ -27,8 +33,10 @@ const defaultValue: OwnersContextType = {
   displayedOwners: [],
   latestTenOwners: [],
   currentPage: 1,
+  totalOwners: 0,
   loadMoreOwners: () => {},
   storeOwners: () => {},
+  fetchOwners: () => {},
 };
 
 // Create the context with default values and types
@@ -44,7 +52,8 @@ const OwnersProvider = ({ children }: OwnersProviderProps) => {
   const [owners, setOwners] = useState<Owner[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [displayedOwners, setDisplayedOwners] = useState<Owner[]>([]);
-  const [latestTenOwners, setlatestTenOwners] = useState<Owner[]>([]);
+  const [latestTenOwners, setLatestTenOwners] = useState<Owner[]>([]);
+  const [totalOwners, setTotalOwners] = useState<number>(0);
 
   // Function to store owners in the state
   const storeOwners = (newOwners: Owner[]) => {
@@ -54,7 +63,22 @@ const OwnersProvider = ({ children }: OwnersProviderProps) => {
     if (newOwners.length > 0) {
       setDisplayedOwners(newOwners.slice(0, 10));
       setCurrentPage(1); // Reset current page
-      setlatestTenOwners(newOwners.slice(0,10));
+      setLatestTenOwners(newOwners.slice(0, 10));
+    }
+  };
+
+  // Function to fetch owners from the server
+  const fetchOwners = async () => {
+    try {
+      const response = await axios.get('http://abdoo120-001-site1.ctempurl.com/api/Owner');
+      if (response.status === 200) {
+        storeOwners(response.data);
+        console.log(response);
+      } else {
+        console.error('Failed to fetch owners:', response.data.message);
+      }
+    } catch (error: any) {
+      console.error('Error fetching owners:', error.message);
     }
   };
 
@@ -68,6 +92,15 @@ const OwnersProvider = ({ children }: OwnersProviderProps) => {
     setCurrentPage(newPage); // Update current page
   };
 
+  useEffect(() => {
+    fetchOwners();
+  }, []);
+
+  useEffect(() => {
+    // Calculate the total number of owners whenever the owners state changes
+    setTotalOwners(owners.length);
+  }, [owners]);
+
   return (
     <OwnersContext.Provider
       value={{
@@ -75,8 +108,10 @@ const OwnersProvider = ({ children }: OwnersProviderProps) => {
         displayedOwners,
         latestTenOwners,
         currentPage,
+        totalOwners,
         loadMoreOwners,
         storeOwners,
+        fetchOwners
       }}
     >
       {children}

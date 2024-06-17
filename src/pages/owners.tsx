@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Navbar from '../components/navbar/navbar.com';
 import DisplayNumbers from '../components/numberCart/number-cart';
 import TableHead from '../components/table/head.comp';
@@ -7,23 +7,51 @@ import Nav from '../components/nav/nav.comp';
 import humbrgerBar from '../assets/menu-icon.png';
 import Footer from '../components/footer/footer.comp';
 import { OwnersContext } from '../context/ownersContext';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const OwnersDisplay: React.FC = () => {
-  const [navbarIsHidden, setNavbarIsDisplay] = useState(true);
-  const { displayedOwners, loadMoreOwners } = useContext(OwnersContext); // Ensure context is correct
+  const [navbarIsHidden, setNavbarIsHidden] = useState(true);
+  const { displayedOwners, loadMoreOwners, fetchOwners, totalOwners } = useContext(OwnersContext);
 
-  const navbarDisplayHandle = (bool: boolean) => {
-    setNavbarIsDisplay(!bool); // Fix toggle behavior
+  const navbarDisplayHandle = () => {
+    setNavbarIsHidden(!navbarIsHidden);
   };
 
   const viewHandle = () => {
-    console.log('view');
+    console.log('View owner');
   };
+
+  const deleteOwner = async (id: string) => {
+    try {
+      const res = await axios.delete(`http://abdoo120-001-site1.ctempurl.com/api/Owner/UnActive/${id}`);
+
+      if (res.status === 200) {
+        toast.success('The Owner Deleted Successfully');
+        // Assuming you have a function to refetch owners after deletion
+        fetchOwners();
+      } else {
+        throw new Error("The Owner isn't deleted, try again");
+      }
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+
+  const viewProofIdentifier = (url: string) => {
+    const baseUrl = 'http://abdoo120-001-site1.ctempurl.com'; // Your server base URL
+    const fullUrl = url.startsWith('http') ? url : `${baseUrl}/${url}`;
+    window.open(fullUrl, '_blank');
+  };
+
+  useEffect(() => {
+    fetchOwners();
+  }, [fetchOwners]);
 
   return (
     <div className="flex gap-5 w-full min-h-screen relative">
       <div className="w-8 h-8 ml-5 absolute mt-10 cursor-pointer xl:hidden">
-        <img onClick={() => navbarDisplayHandle(true)} src={humbrgerBar} alt="menu-icon" />
+        <img onClick={() => navbarDisplayHandle()} src={humbrgerBar} alt="menu-icon" />
       </div>
       <Navbar closeNavbar={navbarDisplayHandle} isHidden={navbarIsHidden} />
 
@@ -32,7 +60,7 @@ const OwnersDisplay: React.FC = () => {
         <div className="flex flex-col gap-20 w-full p-10 bg-slate-100 absolute top-[150px]">
           <div className="w-full flex gap-5 mt-20">
             <DisplayNumbers title="Revenue" number={200} sign="$" />
-            <DisplayNumbers title="Owners" number={200} />
+            <DisplayNumbers title="Owners" number={totalOwners} />
           </div>
 
           <div className="container mx-auto bg-white rounded py-3">
@@ -42,31 +70,26 @@ const OwnersDisplay: React.FC = () => {
                 <TableHead
                   label1="Name"
                   label2="Email"
-                  label3="Phone"
-                  label4="Location"
-                  label5="Price/Hour"
-                  label6="Clients"
+                  label3="Proof of Identity"
                   label7="Actions"
                 />
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {/* Conditional rendering to ensure displayedOwners is an array */}
                   {Array.isArray(displayedOwners) ? (
                     displayedOwners.map((owner) => (
                       <OwnerRow
-                        key={owner.id} // Use a unique key
-                        id={owner.id}
-                        label1={owner.name}
+                        key={owner.ownerId}
+                        id={owner.ownerId}
+                        label1={owner.userName}
                         label2={owner.email}
-                        label3={owner.phone}
-                        label4={owner.location}
-                        label5={100}
-                        label6={200}
+                        label3={owner.proofOfIdentityUrl}
+                        delete={() => deleteOwner(owner.ownerId)} // Pass delete function with owner ID
+                        viewProofIdentifier={viewProofIdentifier}
                         view={viewHandle}
                       />
                     ))
                   ) : (
                     <tr>
-                      <td className='font-bold text-xl text-center'>Loading...</td>
+                      <td className='font-bold text-xl text-center' colSpan={4}>Loading...</td>
                     </tr>
                   )}
                 </tbody>

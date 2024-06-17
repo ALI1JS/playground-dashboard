@@ -19,7 +19,7 @@ const AddCatoggery: React.FC = () => {
                 <button className="px-4 py-3 font-bold text-slate-500">Add catogery</button>
             </div>
              <CatogeryForm isHidden={isHidden} addCatogeryHandle={()=>{addCatogeryHandle(true)}}/>
-            
+              
         </div>
     )
 }

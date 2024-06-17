@@ -16,7 +16,8 @@ interface InputProps {
     font?: string,
     textCenter?:string,
     textColor?: string,
-    handleOnChange?: (event: React.ChangeEvent<HTMLInputElement>) => void // Changed the type of handleOnChange function
+    handleOnChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
+    handleOnSelect?: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 
@@ -31,6 +32,7 @@ const Input: React.FC<InputProps>= (props) => {
                 name={props.name}
                 value={props.value}
                 accept={props.accept}
+                onSelect={props.handleOnSelect}
                 onChange={props.handleOnChange} // Changed to props.handleOnChange
                 className={` ${props.isHidden} w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600`}
             />

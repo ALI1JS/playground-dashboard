@@ -7,6 +7,8 @@ import closeIcon from "../../assets/close-icon.png";
 import homeIcon from "../../assets/home-icon.png";
 import ownersIcon from "../../assets/all-user.png";
 import activeIcon from "../../assets/active-user.png";
+import ViewCategories from '../catogery/view-catogery';
+import ViewBanner from '../banner/view-banner.comp';
 
 
 interface NavbarProps {
@@ -31,10 +33,12 @@ const Navbar: React.FC<NavbarProps> = (props) => {
       <div className='flex flex-col bg-slate-100 p-5'>
         <h2 className='font-bold text-2xl'>Catogery</h2>
          <AddCatoggery />
+         <ViewCategories/>
       </div>
       <div className='flex flex-col bg-slate-100 p-5'>
         <h2 className='font-bold text-2xl'>Banners</h2>
         <AddBanner />
+        <ViewBanner/>
       </div>
 
       <div className='flex flex-col bg-slate-100 p-5'>

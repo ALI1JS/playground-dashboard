@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import axios from 'axios';
 import Navbar from "../components/navbar/navbar.com";
 import DisplayNumbers from "../components/numberCart/number-cart";
 import TableHead from "../components/table/head.comp";
@@ -6,34 +7,108 @@ import OwnerRow from "../components/table/row.comp";
 import humbrgerBar from "../assets/menu-icon.png";
 import Nav from "../components/nav/nav.comp";
 import Footer from "../components/footer/footer.comp";
-
-
-
+import toast from 'react-hot-toast';
+import { OwnersContext } from "../context/ownersContext";
 
 const UsersActivation: React.FC = () => {
-
     const [navbarIsHidden, setNavbarIsDisplay] = useState(true);
+    const [owners, setOwners] = useState<any[]>([]); // State to hold owners data
+    console.log(owners)
+
+    const { totalOwners, fetchOwners } = useContext(OwnersContext);
+
+
+
+    useEffect(() => {
+        fetchOwners();
+      }, [fetchOwners]);
+
+    useEffect(() => {
+        fetchOwners2(); // Fetch owners on component mount
+    }, []);
+
+    const fetchOwners2 = async () => {
+        try {
+            const response = await axios.get('http://abdoo120-001-site1.ctempurl.com/api/Owner', {
+                params: {
+                    approvalStatus: false
+                }
+            });
+
+            if (response.status === 200) {
+                setOwners(response.data); // Set owners data in state
+            } else {
+                throw new Error('Failed to fetch owners');
+            }
+        } catch (error:any) {
+            toast.error('Error fetching owners:', error);
+        }
+    };
 
     const navbarDisplayHandle = (bool: boolean) => {
         setNavbarIsDisplay(bool);
-    }
+    };
 
     const viewHandle = () => {
-        console.log("dispaly")
-    }
-    const activateHandle = () => {
-        console.log("Activated")
-    }
-    const unActivateHandle = () => {
-        console.log("Unactivated")
-    }
+        console.log("Display");
+    };
 
+    const activateHandle = async (id: string) => {
+        try {
+             const activeBody = {
+                myFatoorahKey: "string"
+             }
+            const response = await axios.put(`http://abdoo120-001-site1.ctempurl.com/api/Owner/Active/${id}`, activeBody, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+    
+            });
+
+            if (response.status === 200) {
+                toast.success("Owner activated successfully");
+                // Update owner status locally
+                setOwners(prevOwners =>
+                    prevOwners.map(owner =>
+                        owner.ownerId === id ? { ...owner, isActive: true } : owner
+                    )
+                );
+            } else {
+                throw new Error('Failed to activate owner');
+            }
+        } catch (error:any) {
+            toast.error('Error activating owner:', error);
+        }
+    };
+
+    const unActivateHandle = async (id: string) => {
+        try {
+            const response = await axios.delete(`http://abdoo120-001-site1.ctempurl.com/api/Owner/UnActive/${id}`);
+
+            if (response.status === 200) {
+                console.log("Owner deleted successfully");
+                // Remove deleted owner from state
+                setOwners(prevOwners => prevOwners.filter(owner => owner.id !== id));
+                toast.success('Owner deleted successfully');
+            } else {
+                throw new Error('Failed to delete owner');
+            }
+        } catch (error:any) {
+            console.error('Error deleting owner:', error);
+            toast.error('Failed to delete owner');
+        }
+    };
+
+    const viewProofIdentifier = (url: string) => {
+        const baseUrl = 'http://abdoo120-001-site1.ctempurl.com'; // Your server base URL
+        const fullUrl = url.startsWith('http') ? url : `${baseUrl}/${url}`;
+        window.open(fullUrl, '_blank');
+    };
 
     return (
-
         <div className="flex gap-5 w-[100vw] min-h-[100vh] relative">
             <div className="w-8 h-8 ml-5 absolute mt-10 cursor-pointer xl:hidden">
-                <img onClick={() => { navbarDisplayHandle(false) }} src={humbrgerBar} alt="humbBar" />
+                <img onClick={() => navbarDisplayHandle(false)} src={humbrgerBar} alt="humbBar" />
             </div>
             <Navbar closeNavbar={navbarDisplayHandle} isHidden={navbarIsHidden} />
 
@@ -42,33 +117,42 @@ const UsersActivation: React.FC = () => {
                 <div className="flex flex-col gap-20 w-[100%] p-10 bg-slate-100 absolute top-[150px]">
                     <div className="w-[100%] flex gap-5 mt-20">
                         <DisplayNumbers title="Revenue" number={200} sign="$" />
-                        <DisplayNumbers title="Owners" number={200} />
+                        <DisplayNumbers title="Owners" number={totalOwners} />
                     </div>
 
                     <div className="container mx-auto bg-white rounded py-3">
                         <div className="overflow-x-auto">
                             <h2 className="font-bold text-slate-400 p-3">All Owners</h2>
                             <table className="table-auto min-w-full">
-                            <TableHead label1="name" label2="email" label3="Phone" label4="Location" label5="Price / Hour" label6="Clients Number" label7="Actions" />
+                                <TableHead
+                                    label1="Name"
+                                    label2="Email"
+                                    label3="Proof of Identity"
+                                    label7="Actions"
+                                />
                                 <tbody className="bg-white divide-y divide-gray-200">
-                                    <OwnerRow id="1" label1="ALI" label2="aliismailh08@gmail.com" label3="01120450953" label4="Minya" label5={100} label6={200} activate={activateHandle} UnActivate={unActivateHandle} view={viewHandle} />
-                                    <OwnerRow id="2" label1="ALI" label2="aliismailh08@gmail.com" label3="01120450953" label4="Minya" label5={100} label6={200} activate={activateHandle} UnActivate={unActivateHandle} view={viewHandle} />
-                                    <OwnerRow id="3" label1="ALI" label2="aliismailh08@gmail.com" label3="01120450953" label4="Minya" label5={100} label6={200} activate={activateHandle} UnActivate={unActivateHandle} view={viewHandle} />
-                                    <OwnerRow id="4" label1="ALI" label2="aliismailh08@gmail.com" label3="01120450953" label4="Minya" label5={100} label6={200} activate={activateHandle} UnActivate={unActivateHandle} view={viewHandle} />
-                                    <OwnerRow id="5" label1="ALI" label2="aliismailh08@gmail.com" label3="01120450953" label4="Minya" label5={100} label6={200} activate={activateHandle} UnActivate={unActivateHandle} view={viewHandle} />
-                                    <OwnerRow id="6" label1="ALI" label2="aliismailh08@gmail.com" label3="01120450953" label4="Minya" label5={100} label6={200} activate={activateHandle} UnActivate={unActivateHandle} view={viewHandle} />
-                                    <OwnerRow id="7" label1="ALI" label2="aliismailh08@gmail.com" label3="01120450953" label4="Minya" label5={100} label6={200} activate={activateHandle} UnActivate={unActivateHandle} view={viewHandle} />
+                                    {owners.map(owner => (
+                                        <OwnerRow
+                                            key={owner.ownerId}
+                                            id={owner.ownerId}
+                                            label1={owner.userName}
+                                            label2={owner.email}
+                                            label3={owner.proofOfIdentityUrl}
+                                            activate={() => activateHandle(owner.ownerId)}
+                                            unActivate={() => unActivateHandle(owner.ownerId)}
+                                            viewProofIdentifier={() => viewProofIdentifier(owner.proofOfIdentityUrl)}
+                                            view={viewHandle}
+                                        />
+                                    ))}
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                    <Footer/>
+                    <Footer />
                 </div>
-
             </div>
         </div>
-    )
-}
-
+    );
+};
 
 export default UsersActivation;
