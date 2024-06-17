@@ -35,7 +35,7 @@ const OwnerDetailsPage: React.FC = () => {
     const [playgrounds, setPlayGround] = useState<PlayGround[]>([]);
     const [loading, setLoading] = useState(true);
     const [navbarIsHidden, setNavbarIsHidden] = useState(true);
-    const { totalOwners, fetchOwners } = useContext(OwnersContext);
+    const { fetchOwners } = useContext(OwnersContext);
 
 
     const navbarDisplayHandle = (bool: boolean) => {

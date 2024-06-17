@@ -7,7 +7,7 @@ import OwnerDetailsPage from './pages/owner-details';
 export const routers = [
   {
     path: '/',
-    element: <Login username={''} password={''} />,
+    element: <Login email={''} password={''} />,
     auth: false
   },
   {
