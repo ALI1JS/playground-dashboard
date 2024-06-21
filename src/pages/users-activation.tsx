@@ -6,10 +6,8 @@ import TableHead from "../components/table/head.comp";
 import OwnerRow from "../components/table/row.comp";
 import humbrgerBar from "../assets/menu-icon.png";
 import Nav from "../components/nav/nav.comp";
-import Footer from "../components/footer/footer.comp";
 import toast from 'react-hot-toast';
 import { OwnersContext } from "../context/ownersContext";
-import { useAdmin } from "../context/adminContext";
 import ActiveForm from "../components/active-form";// Import the Modal component
 
 const UsersActivation: React.FC = () => {
@@ -18,8 +16,6 @@ const UsersActivation: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
     const [selectedOwnerId, setSelectedOwnerId] = useState<string | null>(null); // State to store selected owner ID
     const { totalOwners, fetchOwners } = useContext(OwnersContext);
-    const { admin } = useAdmin();
-
     useEffect(() => {
         fetchOwners();
     }, [fetchOwners]);
