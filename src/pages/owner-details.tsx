@@ -52,8 +52,8 @@ const OwnerDetailsPage: React.FC = () => {
     const fetchOwnerDetails = async () => {
       try {
         const [ownerResponse, playgroundsResponse] = await Promise.all([
-          axios.get(`http://abdoo120-001-site1.ctempurl.com/api/Owner/${id}`),
-          axios.get(`http://abdoo120-001-site1.ctempurl.com/api/Owner/GetStadiums/${id}`)
+          axios.get(`https://abdoo120-001-site1.ctempurl.com/api/Owner/${id}`),
+          axios.get(`https://abdoo120-001-site1.ctempurl.com/api/Owner/GetStadiums/${id}`)
         ]);
 
         if (ownerResponse.status === 200) {

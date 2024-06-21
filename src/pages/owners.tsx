@@ -23,7 +23,7 @@ const OwnersDisplay: React.FC = () => {
 
   const deleteOwner = async (id: string) => {
     try {
-      const res = await axios.delete(`http://abdoo120-001-site1.ctempurl.com/api/Owner/UnActive/${id}`);
+      const res = await axios.delete(`https://abdoo120-001-site1.ctempurl.com/api/Owner/UnActive/${id}`);
 
       if (res.status === 200) {
         toast.success('The Owner Deleted Successfully');
@@ -37,7 +37,7 @@ const OwnersDisplay: React.FC = () => {
   };
 
   const viewProofIdentifier = (url: string) => {
-    const baseUrl = 'http://abdoo120-001-site1.ctempurl.com';
+    const baseUrl = 'https://abdoo120-001-site1.ctempurl.com';
     const fullUrl = url.startsWith('http') ? url : `${baseUrl}/${url}`;
     window.open(fullUrl, '_blank');
   };

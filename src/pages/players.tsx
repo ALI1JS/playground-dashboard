@@ -23,7 +23,7 @@ const PlayersDisplay: React.FC = () => {
 
   const deletePlayer = async (id: string) => {
     try {
-      const res = await axios.delete(`http://abdoo120-001-site1.ctempurl.com/api/Player/UnActive/${id}`);
+      const res = await axios.delete(`https://abdoo120-001-site1.ctempurl.com/api/Player/UnActive/${id}`);
 
       if (res.status === 200) {
         toast.success('The Player Deleted Successfully');
@@ -38,7 +38,7 @@ const PlayersDisplay: React.FC = () => {
 
   const viewProofIdentifier = (url?: string) => {
     if (url) {
-      const baseUrl = 'http://abdoo120-001-site1.ctempurl.com';
+      const baseUrl = 'https://abdoo120-001-site1.ctempurl.com';
       const fullUrl = url.startsWith('http') ? url : `${baseUrl}/${url}`;
       window.open(fullUrl, '_blank');
     } else {
@@ -48,7 +48,7 @@ const PlayersDisplay: React.FC = () => {
 
   const activatePlayer = async (id: string) => {
     try {
-      const res = await axios.put(`http://abdoo120-001-site1.ctempurl.com/api/Player/Active/${id}`);
+      const res = await axios.put(`https://abdoo120-001-site1.ctempurl.com/api/Player/Active/${id}`);
 
       if (res.status === 200) {
         toast.success('The Player Activated Successfully');

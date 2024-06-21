@@ -29,7 +29,7 @@ const BannerForm: React.FC<BannerFormProps> = ({ isHidden, addBannerHandle }) =>
         formData.append('BannerImage', image);
 
         try {
-            const response = await axios.post('http://abdoo120-001-site1.ctempurl.com/api/Banner/UploadBannerImage', formData, {
+            const response = await axios.post('https://abdoo120-001-site1.ctempurl.com/api/Banner/UploadBannerImage', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -57,7 +57,7 @@ const BannerForm: React.FC<BannerFormProps> = ({ isHidden, addBannerHandle }) =>
         };
 
         try {
-            const response = await axios.post('http://abdoo120-001-site1.ctempurl.com/api/Banner/Add', bannerData, {
+            const response = await axios.post('https://abdoo120-001-site1.ctempurl.com/api/Banner/Add', bannerData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },

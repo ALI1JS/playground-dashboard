@@ -13,7 +13,7 @@ const ViewBanner: React.FC = () => {
     const fetchBanners = async () => {
         setLoading(true);
         try {
-            const response = await axios.get('http://abdoo120-001-site1.ctempurl.com/api/Banner');
+            const response = await axios.get('https://abdoo120-001-site1.ctempurl.com/api/Banner');
             setBanners(response.data);
             setLoading(false);
             setIsHidden(false);
@@ -25,12 +25,12 @@ const ViewBanner: React.FC = () => {
 
     const deleteCategory = async (id: string, url: string) => {
         try {
-            const deleteImageResponse = await axios.post('http://abdoo120-001-site1.ctempurl.com/api/Banner/DeleteBannerImage', {
+            const deleteImageResponse = await axios.post('https://abdoo120-001-site1.ctempurl.com/api/Banner/DeleteBannerImage', {
                 bannerImageUrl: url
             });
 
             if (deleteImageResponse.status === 200) {
-                const deleteBannerResponse = await axios.delete(`http://abdoo120-001-site1.ctempurl.com/api/Banner/Delete/${id}`);
+                const deleteBannerResponse = await axios.delete(`https://abdoo120-001-site1.ctempurl.com/api/Banner/Delete/${id}`);
                 if (deleteBannerResponse.status === 200) {
                     toast.success('Banner Deleted');
                     setBanners(banners.filter(banner => banner.bannerId !== id));
@@ -65,7 +65,7 @@ const ViewBanner: React.FC = () => {
                                 {banners.map(banner => (
                                     <div key={banner.bannerId} className="relative group">
                                         <img
-                                            src={`http://abdoo120-001-site1.ctempurl.com/${banner.bannerImageUrl}`}
+                                            src={`https://abdoo120-001-site1.ctempurl.com/${banner.bannerImageUrl}`}
                                             alt="banner-image"
                                             className="h-32 w-full object-cover rounded"
                                         />

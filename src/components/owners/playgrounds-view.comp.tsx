@@ -25,7 +25,7 @@ const PlayGroundView: React.FC<PlayGroundViewProps> = ({ playgrounds: initialPla
 
     const deleteHandle = async (id: string) => {
         try {
-            const response = await axios.delete(`http://abdoo120-001-site1.ctempurl.com/api/Stadium/Delete/${id}`);
+            const response = await axios.delete(`https://abdoo120-001-site1.ctempurl.com/api/Stadium/Delete/${id}`);
             if (response.status === 200) {
                 setPlaygrounds(prevPlaygrounds => prevPlaygrounds.filter(playground => playground.stadiumId !== id));
                 toast.success('Playground deleted successfully');
@@ -39,7 +39,7 @@ const PlayGroundView: React.FC<PlayGroundViewProps> = ({ playgrounds: initialPla
 
     const activateHandle = async (id: string) => {
         try {
-            const response = await axios.put(`http://abdoo120-001-site1.ctempurl.com/api/Stadium/Active/${id}`);
+            const response = await axios.put(`https://abdoo120-001-site1.ctempurl.com/api/Stadium/Active/${id}`);
             if (response.status === 200) {
                 setPlaygrounds(prevPlaygrounds =>
                     prevPlaygrounds.map(playground =>
