@@ -5,12 +5,10 @@ import OwnerView from "../components/owners/owners.viewcomp";
 import Nav from "../components/nav/nav.comp";
 import humbrgerBar from "../assets/menu-icon.png";
 import { OwnersContext } from "../context/ownersContext";
-import { useAdmin } from "../context/adminContext";
 
 const Dashboard: React.FC = () => {
   const [navbarIsHidden, setNavbarIsHidden] = useState(true);
   const { fetchOwners, totalOwners } = useContext(OwnersContext);
-  const { admin } = useAdmin();
 
   const navbarDisplayHandle = () => {
     setNavbarIsHidden(!navbarIsHidden);
