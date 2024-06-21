@@ -32,7 +32,6 @@ const AdminProvider = ({ children }: AdminProviderProps) => {
 
   const setAdmin = (admin: Admin) => {
     setAdminState(admin);
-    console.log(admin.wallet)
     localStorage.setItem('admin', JSON.stringify(admin)); // Store admin details in localStorage
   };
 

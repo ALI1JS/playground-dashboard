@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import plusIcon from "../../assets/plus-icon.png";
+import plusIcon from "../../assets/plus.png";
 import closeIcon from "../../assets/close-icon.png";
 
 
@@ -8,13 +8,11 @@ const ViewCategories: React.FC = () => {
     const [isHidden, setIsHidden] = useState(true);
     const [categories, setCategories] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
-    console.log(categories);
 
     const fetchCategories = async () => {
         setLoading(true);
         try {
             const response = await axios.get('http://abdoo120-001-site1.ctempurl.com/api/Category');
-            console.log(response)
             setCategories(response.data);
             setLoading(false);
             setIsHidden(false);

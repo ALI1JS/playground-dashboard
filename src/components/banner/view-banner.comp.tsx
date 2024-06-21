@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import plusIcon from "../../assets/plus-icon.png";
+import plusIcon from "../../assets/plus.png";
 import closeIcon from "../../assets/close-icon.png";
 import deleteImage from "../../assets/close-icon.png"; // Ensure this path is correct
 import toast from 'react-hot-toast';

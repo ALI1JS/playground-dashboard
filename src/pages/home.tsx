@@ -1,12 +1,9 @@
 import React, { useContext, useState, useEffect } from "react";
 import Navbar from "../components/navbar/navbar.com";
 import DisplayNumbers from "../components/numberCart/number-cart";
-import ChartComponent from "../components/charts/owners-chrts.comp";
-import RevenueChart from "../components/charts/revenue-charts.comp";
 import OwnerView from "../components/owners/owners.viewcomp";
 import Nav from "../components/nav/nav.comp";
 import humbrgerBar from "../assets/menu-icon.png";
-import Footer from "../components/footer/footer.comp";
 import { OwnersContext } from "../context/ownersContext";
 import { useAdmin } from "../context/adminContext";
 
@@ -34,17 +31,10 @@ const Dashboard: React.FC = () => {
         <Nav />
         <div className="flex flex-col gap-20 w-[100%] p-10 bg-slate-100 absolute top-[150px]">
           <div className="w-[100%] flex gap-5 mt-10">
-            <DisplayNumbers title="Revenue" number={admin?.wallet} sign="$" />
             <DisplayNumbers title="Owners" number={totalOwners} />
-          </div>
-          <div className="w-[100%] flex justify-between gap-2 flex-wrap">
-            <ChartComponent />
-            <RevenueChart />
           </div>
 
           <OwnerView />
-
-          <Footer />
         </div>
       </div>
     </div>

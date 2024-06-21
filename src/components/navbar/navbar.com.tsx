@@ -2,10 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import AddCatoggery from '../catogery/add-catogery.comp';
 import AddBanner from '../banner/add-banner.comp';
-import CreateOwner from '../owners/create-owner.comp';
 import closeIcon from "../../assets/close-icon.png";
-import homeIcon from "../../assets/home-icon.png";
-import ownersIcon from "../../assets/all-user.png";
+import homeIcon from "../../assets/home.png";
+import ownersIcon from "../../assets/users.png";
 import activeIcon from "../../assets/active-user.png";
 import ViewCategories from '../catogery/view-catogery';
 import ViewBanner from '../banner/view-banner.comp';
@@ -27,8 +26,9 @@ const Navbar: React.FC<NavbarProps> = (props) => {
       <div className='flex flex-col gap-5 font-bold cursor-pointer bg-slate-100 p-5 '>
         <Link to="/dashboard"><h1 className='mt-20 font-bold text-2xl p-2'>Dashboard</h1></Link>
         <Link className='flex gap-3' to="/dashboard"> <img className='w-6 h-6' src={homeIcon} alt="home-icon"/> Home</Link>
-        <Link className='flex gap-3' to="/all-owners"> <img className='w-6 h-6' src={ownersIcon} alt="home-icon"/>All Owners</Link>
-        <Link className='flex gap-3' to="/active-users"> <img className='w-6 h-6' src={activeIcon} alt="home-icon"/> Active Users</Link>
+        <Link className='flex gap-3' to="/active-owners"> <img className='w-6 h-6' src={ownersIcon} alt="home-icon"/>Active Owners</Link>
+        <Link className='flex gap-3' to="/unactive-owners"> <img className='w-6 h-6' src={activeIcon} alt="home-icon"/>UnActive Owners</Link>
+        <Link className='flex gap-3' to="/active-players"> <img className='w-6 h-6' src={ownersIcon} alt="home-icon"/>All Players</Link>
       </div>
       <div className='flex flex-col bg-slate-100 p-5'>
         <h2 className='font-bold text-2xl'>Catogery</h2>
@@ -39,11 +39,6 @@ const Navbar: React.FC<NavbarProps> = (props) => {
         <h2 className='font-bold text-2xl'>Banners</h2>
         <AddBanner />
         <ViewBanner/>
-      </div>
-
-      <div className='flex flex-col bg-slate-100 p-5'>
-        <h2 className='font-bold text-2xl'>Add Owner</h2>
-        <CreateOwner />
       </div>
     </div>
   );

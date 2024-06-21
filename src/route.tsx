@@ -3,35 +3,40 @@ import Login from './components/login/login';
 import OwnersDidpaly from './pages/owners';
 import UsersActivation from './pages/users-activation';
 import OwnerDetailsPage from './pages/owner-details';
+import PlayersDisplay from './pages/players';
+import PlayerDetails from './pages/player-details';
 
 export const routers = [
   {
     path: '/',
-    element: <Login email={''} password={''} />,
-    auth: false
+    element: <Login/>,
   },
   {
     path: '/dashboard',
     element: <Dashboard />,
-    auth: true
   },
   {
-    path: '/all-owners',
+    path: '/active-owners',
     element: <OwnersDidpaly />,
-    auth: true
   },
   {
-    path: "/active-users",
+    path: "/unactive-owners",
     element: <UsersActivation />,
-    auth: true
+  },
+  {
+    path: "/active-players",
+    element: <PlayersDisplay />,
+  },
+  {
+    path: "/player/:id",
+    element: <PlayerDetails/>,
   },
   {
     path: "/owner/:id",
     element: <OwnerDetailsPage />,
-    auth: true
   },
   {
     path: "*",
-    element: <h2>Page Not Found</h2>
+    element: <h2 className='text-center'>Page Not Found</h2>
   }
 ]

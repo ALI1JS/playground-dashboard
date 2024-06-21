@@ -7,7 +7,8 @@ interface TableHeadProps {
     label4?: string,
     label5?: string,
     label6?: string,
-    label7?: string
+    label7?: string,
+    label8?: string
 }
 
 const TableHead:React.FC<TableHeadProps>= (props) => {

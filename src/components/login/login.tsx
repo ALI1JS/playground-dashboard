@@ -7,12 +7,10 @@ import toast from "react-hot-toast";
 import { useAdmin } from "../../context/adminContext";
 
 
-const Login: React.FC<UserType> = () => {
+const Login: React.FC = () => {
 
-    const [adminLoginData, setUserData] = useState<UserType>({ email: '', password: '' });
+    const [adminLoginData, setUserData] = useState({ email: '', password: '' });
     const [errors, setErrors] = useState<UserType>({ email: '', password: '' });
-    const [resetPassword, setResetPassword] = useState<boolean>(false);
-    const [checkEmailMsg, setcheckEmailMsg] = useState<boolean>(false);
     const navigate = useNavigate();
     const { setAdmin } = useAdmin();
 
@@ -22,12 +20,7 @@ const Login: React.FC<UserType> = () => {
         setUserData(prevState => ({ ...prevState, [name]: value }))
         validateField(name, value);
     }
-    /**
-     * 
-     * hawihubsa@gmail.com
-     *  Hawi@2030
-     */
-    
+   
     const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
     
@@ -40,7 +33,6 @@ const Login: React.FC<UserType> = () => {
         const response = await axios.post('http://abdoo120-001-site1.ctempurl.com/api/Admin/Login', adminLoginData);
         
         if (response.status === 200) {
-          console.log(response.data)
           setAdmin({ username: response.data.userName, wallet: response.data.wallet });
           sessionStorage.setItem('adminEmail', response.data.email)
           toast.success('Login Successfully');
@@ -66,27 +58,6 @@ const Login: React.FC<UserType> = () => {
       }
     };
     
-
-    const resetPassSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
-        e.preventDefault();
-
-        if (!adminLoginData.email || errors.email) {
-            console.error('Form validation errors:', errors.email);
-            return; // Stop submission if there are errors
-        }
-
-        setcheckEmailMsg(true);
-        // Implement your login logic here, e.g., calling an API
-        console.log('Login attempt:', adminLoginData.email);
-
-        // return to Login Component after some minutes
-
-        setTimeout(() => {
-            setResetPassword(false);
-        }, 3000)
-
-    }
-
     const validateField = (name: string, value: string): void => {
         let errMsg = '';
         if (!value) {
@@ -104,16 +75,11 @@ const Login: React.FC<UserType> = () => {
         setErrors(prevErrors => ({ ...prevErrors, [name]: errMsg }));
     };
 
-    const resetPasswordHandle = (): void => {
-        setResetPassword(true);
-    }
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             <div className="rounded px-8 py-6 mt-4 text-left bg-white shadow-lg md:w-1/3 lg:w-1/4">
-                {
-                    !resetPassword &&
-                    <>
+                
                         <h3 className="text-2xl font-bold text-center">Login</h3>
                         <form onSubmit={handleLogin}>
                             <div className="mt-4">
@@ -122,23 +88,9 @@ const Login: React.FC<UserType> = () => {
                                 <Input type="password" name="password" label="password" value={adminLoginData.password} handleOnChange={handleOnChange} error={errors.password} />
                                 <div className="flex items-baseline justify-between">
                                     <button type="submit" className="px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900">Login</button>
-                                    <a onClick={resetPasswordHandle} className="text-sm text-blue-600 hover:underline cursor-pointer">Forgot password?</a>
                                 </div>
                             </div>
                         </form>
-                    </>
-
-                }
-                {
-                    resetPassword &&
-                    <form onSubmit={resetPassSubmit}>
-                        {checkEmailMsg && <p className="text-black text-whrite text-md font-bold mt-1">check your email to Rest your password</p>}
-                        <Input type="text" name="username" label="usernamOrEmail" value={adminLoginData.email} handleOnChange={handleOnChange} error={errors.email} />
-                        <button type="submit" className="px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900">Login</button>
-                    </form>
-
-                }
-
 
             </div>
         </div>

@@ -9,23 +9,20 @@ import Nav from "../components/nav/nav.comp";
 import Footer from "../components/footer/footer.comp";
 import toast from 'react-hot-toast';
 import { OwnersContext } from "../context/ownersContext";
+import { useAdmin } from "../context/adminContext";
+import ActiveForm from "../components/active-form";// Import the Modal component
 
 const UsersActivation: React.FC = () => {
     const [navbarIsHidden, setNavbarIsDisplay] = useState(true);
     const [owners, setOwners] = useState<any[]>([]); // State to hold owners data
-    console.log(owners)
-
+    const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+    const [selectedOwnerId, setSelectedOwnerId] = useState<string | null>(null); // State to store selected owner ID
     const { totalOwners, fetchOwners } = useContext(OwnersContext);
-
-
+    const { admin } = useAdmin();
 
     useEffect(() => {
         fetchOwners();
-      }, [fetchOwners]);
-
-    useEffect(() => {
-        fetchOwners2(); // Fetch owners on component mount
-    }, []);
+    }, [fetchOwners]);
 
     const fetchOwners2 = async () => {
         try {
@@ -45,6 +42,10 @@ const UsersActivation: React.FC = () => {
         }
     };
 
+    useEffect(() => {
+        fetchOwners2(); // Fetch owners on component mount
+    }, []);
+
     const navbarDisplayHandle = (bool: boolean) => {
         setNavbarIsDisplay(bool);
     };
@@ -53,26 +54,30 @@ const UsersActivation: React.FC = () => {
         console.log("Display");
     };
 
-    const activateHandle = async (id: string) => {
+    const handleActivateClick = (id: string) => {
+        setSelectedOwnerId(id);
+        setIsModalOpen(true);
+    };
+
+    const activateHandle = async (supplierCode: string) => {
+        if (!selectedOwnerId) return;
+
         try {
-             const activeBody = {
-                myFatoorahKey: "string"
-             }
-            const response = await axios.put(`http://abdoo120-001-site1.ctempurl.com/api/Owner/Active/${id}`, activeBody, {
+            const activeBody = {
+                supplierCode
+            };
+            const response = await axios.put(`http://abdoo120-001-site1.ctempurl.com/api/Owner/Active/${selectedOwnerId}`, activeBody, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-    
             });
 
             if (response.status === 200) {
                 toast.success("Owner activated successfully");
-                // Update owner status locally
-                setOwners(prevOwners =>
-                    prevOwners.map(owner =>
-                        owner.ownerId === id ? { ...owner, isActive: true } : owner
-                    )
-                );
+                // Remove the activated owner from the state
+                setOwners(prevOwners => prevOwners.filter(owner => owner.ownerId !== selectedOwnerId));
+                setIsModalOpen(false);
+                setSelectedOwnerId(null);
             } else {
                 throw new Error('Failed to activate owner');
             }
@@ -88,7 +93,7 @@ const UsersActivation: React.FC = () => {
             if (response.status === 200) {
                 console.log("Owner deleted successfully");
                 // Remove deleted owner from state
-                setOwners(prevOwners => prevOwners.filter(owner => owner.id !== id));
+                setOwners(prevOwners => prevOwners.filter(owner => owner.ownerId !== id));
                 toast.success('Owner deleted successfully');
             } else {
                 throw new Error('Failed to delete owner');
@@ -116,7 +121,6 @@ const UsersActivation: React.FC = () => {
                 <Nav />
                 <div className="flex flex-col gap-20 w-[100%] p-10 bg-slate-100 absolute top-[150px]">
                     <div className="w-[100%] flex gap-5 mt-20">
-                        <DisplayNumbers title="Revenue" number={200} sign="$" />
                         <DisplayNumbers title="Owners" number={totalOwners} />
                     </div>
 
@@ -138,7 +142,7 @@ const UsersActivation: React.FC = () => {
                                             label1={owner.userName}
                                             label2={owner.email}
                                             label3={owner.proofOfIdentityUrl}
-                                            activate={() => activateHandle(owner.ownerId)}
+                                            activate={() => handleActivateClick(owner.ownerId)}
                                             unActivate={() => unActivateHandle(owner.ownerId)}
                                             viewProofIdentifier={() => viewProofIdentifier(owner.proofOfIdentityUrl)}
                                             view={viewHandle}
@@ -148,9 +152,14 @@ const UsersActivation: React.FC = () => {
                             </table>
                         </div>
                     </div>
-                    <Footer />
                 </div>
             </div>
+
+            <ActiveForm
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSubmit={activateHandle}
+            />
         </div>
     );
 };

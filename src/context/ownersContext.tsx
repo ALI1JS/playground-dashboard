@@ -1,5 +1,6 @@
 import { createContext, useState, ReactNode, useEffect } from 'react';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 // Define the Owner interface
 interface Owner {
@@ -22,7 +23,7 @@ interface OwnersContextType {
   currentPage: number;
   latestTenOwners: Owner[];
   totalOwners: number;
-  loadMoreOwners: () => void;
+  loadMoreOwners: () => boolean;
   storeOwners: (newOwners: Owner[]) => void;
   fetchOwners: () => void;
 }
@@ -34,9 +35,9 @@ const defaultValue: OwnersContextType = {
   latestTenOwners: [],
   currentPage: 1,
   totalOwners: 0,
-  loadMoreOwners: () => {},
-  storeOwners: () => {},
-  fetchOwners: () => {},
+  loadMoreOwners: ():any => { },
+  storeOwners: () => { },
+  fetchOwners: () => { },
 };
 
 // Create the context with default values and types
@@ -70,26 +71,36 @@ const OwnersProvider = ({ children }: OwnersProviderProps) => {
   // Function to fetch owners from the server
   const fetchOwners = async () => {
     try {
-      const response = await axios.get('http://abdoo120-001-site1.ctempurl.com/api/Owner');
+      const response = await axios.get('http://abdoo120-001-site1.ctempurl.com/api/Owner', {
+        params: {
+          approvalStatus: true
+        }
+      });
       if (response.status === 200) {
         storeOwners(response.data);
-        console.log(response);
       } else {
-        console.error('Failed to fetch owners:', response.data.message);
+       toast.error('Failed to fetch owners:', response.data.message);
       }
     } catch (error: any) {
-      console.error('Error fetching owners:', error.message);
+      toast.error('Error fetching owners:', error.message);
     }
   };
 
   // Function to load more owners
-  const loadMoreOwners = () => {
+  const loadMoreOwners = ():boolean => {
     const newPage = currentPage + 1;
     const start = (newPage - 1) * 10;
     const newOwners = owners.slice(start, start + 10);
 
-    setDisplayedOwners((prev) => [...prev, ...newOwners]); // Add new owners to displayed
-    setCurrentPage(newPage); // Update current page
+
+    if (newOwners.length === 0) {
+      return false;
+    }
+
+    setDisplayedOwners((prev) => [...prev, ...newOwners]);
+    setCurrentPage(newPage);
+
+    return true;
   };
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import plusIcon from "../../assets/plus-icon.png";
+import plusIcon from "../../assets/plus.png";
 import BannerForm from "./add-banner-form";
 
 

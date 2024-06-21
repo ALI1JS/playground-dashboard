@@ -5,7 +5,6 @@ import TableHead from '../components/table/head.comp';
 import OwnerRow from '../components/table/row.comp';
 import Nav from '../components/nav/nav.comp';
 import humbrgerBar from '../assets/menu-icon.png';
-import Footer from '../components/footer/footer.comp';
 import { OwnersContext } from '../context/ownersContext';
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -28,7 +27,6 @@ const OwnersDisplay: React.FC = () => {
 
       if (res.status === 200) {
         toast.success('The Owner Deleted Successfully');
-        // Assuming you have a function to refetch owners after deletion
         fetchOwners();
       } else {
         throw new Error("The Owner isn't deleted, try again");
@@ -39,7 +37,7 @@ const OwnersDisplay: React.FC = () => {
   };
 
   const viewProofIdentifier = (url: string) => {
-    const baseUrl = 'http://abdoo120-001-site1.ctempurl.com'; // Your server base URL
+    const baseUrl = 'http://abdoo120-001-site1.ctempurl.com';
     const fullUrl = url.startsWith('http') ? url : `${baseUrl}/${url}`;
     window.open(fullUrl, '_blank');
   };
@@ -47,6 +45,13 @@ const OwnersDisplay: React.FC = () => {
   useEffect(() => {
     fetchOwners();
   }, [fetchOwners]);
+
+  const handleLoadMore = () => {
+    const moreOwnersLoaded = loadMoreOwners();
+    if (!moreOwnersLoaded) {
+      toast('No more owners to load', { icon: '🚫' });
+    }
+  };
 
   return (
     <div className="flex gap-5 w-full min-h-screen relative">
@@ -59,7 +64,6 @@ const OwnersDisplay: React.FC = () => {
         <Nav />
         <div className="flex flex-col gap-20 w-full p-10 bg-slate-100 absolute top-[150px]">
           <div className="w-full flex gap-5 mt-20">
-            <DisplayNumbers title="Revenue" number={200} sign="$" />
             <DisplayNumbers title="Owners" number={totalOwners} />
           </div>
 
@@ -82,7 +86,7 @@ const OwnersDisplay: React.FC = () => {
                         label1={owner.userName}
                         label2={owner.email}
                         label3={owner.proofOfIdentityUrl}
-                        delete={() => deleteOwner(owner.ownerId)} // Pass delete function with owner ID
+                        delete={() => deleteOwner(owner.ownerId)}
                         viewProofIdentifier={viewProofIdentifier}
                         view={viewHandle}
                       />
@@ -99,14 +103,12 @@ const OwnersDisplay: React.FC = () => {
 
           <div className="flex justify-center">
             <button
-              onClick={loadMoreOwners}
-              className="hover:bg-blue-600 bg-blue-500 rounded px-5 py-3 font-bold text-white"
+              onClick={handleLoadMore}
+              className="hover:bg-green-600 bg-green-500 rounded px-5 py-3 font-bold text-white"
             >
               More
             </button>
           </div>
-
-          <Footer />
         </div>
       </div>
     </div>
