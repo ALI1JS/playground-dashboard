@@ -1,6 +1,10 @@
 {
     "rewrites": [
       {
+        "source": "/api/Admin/Login",
+        "destination": "http://abdoo120-001-site1.ctempurl.com/api/Admin/Login"
+      },
+      {
         "source": "/(.*)",
         "destination": "/"
       }
