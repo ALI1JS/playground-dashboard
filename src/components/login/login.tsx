@@ -30,7 +30,7 @@ const Login: React.FC = () => {
       }
     
       try {
-        const response = await axios.post('https://abdoo120-001-site1.ctempurl.com/api/Admin/Login', adminLoginData);
+        const response = await axios.post('http://abdoo120-001-site1.ctempurl.com/api/Admin/Login', adminLoginData);
         
         if (response.status === 200) {
           setAdmin({ username: response.data.userName, wallet: response.data.wallet });
