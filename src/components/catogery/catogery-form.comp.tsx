@@ -31,7 +31,7 @@ const CatogeryForm: React.FC<CatogeryFormProps> = ({ isHidden, addCatogeryHandle
         formData.append('CategoryImage', image);
 
         try {
-            const response = await axios.post('https://abdoo120-001-site1.ctempurl.com/api/Category/UploadCategoryImage', formData, {
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Category/UploadCategoryImage`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -69,7 +69,7 @@ const CatogeryForm: React.FC<CatogeryFormProps> = ({ isHidden, addCatogeryHandle
         };
 
         try {
-            const response = await axios.post('https://abdoo120-001-site1.ctempurl.com/api/Category/Add', categoryData, {
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Category/Add`, categoryData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },

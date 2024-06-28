@@ -14,7 +14,6 @@ const Login: React.FC = () => {
     const navigate = useNavigate();
     const { setAdmin } = useAdmin();
 
-
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target;
         setUserData(prevState => ({ ...prevState, [name]: value }))
@@ -30,7 +29,7 @@ const Login: React.FC = () => {
       }
     
       try {
-        const response = await axios.post('https://abdoo120-001-site1.ctempurl.com/api/Admin/Login', adminLoginData);
+        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Admin/Login`, adminLoginData);
         
         if (response.status === 200) {
           setAdmin({ username: response.data.userName, wallet: response.data.wallet });

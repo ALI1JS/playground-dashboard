@@ -10,7 +10,7 @@ interface BasicInfoProps {
 
 const OwnerBasicInfo: React.FC<BasicInfoProps> = ({ username, email, avatar, proofOfIdentityUrl }) => {
     // Fallback to default avatar if the provided avatar URL is null or empty
-    const profilePictureUrl = avatar ? `https://abdoo120-001-site1.ctempurl.com/${avatar}` : avatarIcon;
+    const profilePictureUrl = avatar ? `${import.meta.env.VITE_BASE_URL}/${avatar}` : avatarIcon;
 
     return (
         <div className="flex flex-col gap-5 p-5 bg-white rounded">
@@ -28,7 +28,7 @@ const OwnerBasicInfo: React.FC<BasicInfoProps> = ({ username, email, avatar, pro
             </div>
             {proofOfIdentityUrl && (
                 <div className="mt-5">
-                    <a href={`https://abdoo120-001-site1.ctempurl.com/${proofOfIdentityUrl}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+                    <a href={`${import.meta.env.VITE_BASE_URL}/${proofOfIdentityUrl}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
                         View Proof of Identity
                     </a>
                 </div>

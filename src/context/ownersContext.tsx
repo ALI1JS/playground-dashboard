@@ -71,7 +71,7 @@ const OwnersProvider = ({ children }: OwnersProviderProps) => {
   // Function to fetch owners from the server
   const fetchOwners = async () => {
     try {
-      const response = await axios.get('https://abdoo120-001-site1.ctempurl.com/api/Owner', {
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/Owner`, {
         params: {
           approvalStatus: true
         }

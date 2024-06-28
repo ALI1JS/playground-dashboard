@@ -12,7 +12,7 @@ const ViewCategories: React.FC = () => {
     const fetchCategories = async () => {
         setLoading(true);
         try {
-            const response = await axios.get('https://abdoo120-001-site1.ctempurl.com/api/Category');
+            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/Category`);
             setCategories(response.data);
             setLoading(false);
             setIsHidden(false);
@@ -24,7 +24,7 @@ const ViewCategories: React.FC = () => {
 
     const deleteCategory = async (id: string) => {
         try {
-            await axios.delete(`https://abdoo120-001-site1.ctempurl.com/api/Category/Delete/${id}`);
+            await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/Category/Delete/${id}`);
             setCategories(categories.filter(category => category.categoryId !== id));
         } catch (error: any) {
             console.error('Error deleting category:', error);
@@ -63,7 +63,7 @@ const ViewCategories: React.FC = () => {
                                             <td className="border px-4 py-1">{category.categoryNameAr}</td>
                                             <td className="border px-4 py-1">{category.categoryNameEn}</td>
                                             <td className="border px-4 py-1">
-                                                <img src={`https://abdoo120-001-site1.ctempurl.com/${category.categoryImageUrl}`} alt={category.categoryNameEn} className="h-16 w-16 object-cover" />
+                                                <img src={`${import.meta.env.VITE_BASE_URL}/${category.categoryImageUrl}`} alt={category.categoryNameEn} className="h-16 w-16 object-cover" />
                                             </td>
                                             <td className="border px-4 py-2">
                                                 <button 

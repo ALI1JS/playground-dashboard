@@ -22,7 +22,7 @@ const UsersActivation: React.FC = () => {
 
     const fetchOwners2 = async () => {
         try {
-            const response = await axios.get('https://abdoo120-001-site1.ctempurl.com/api/Owner', {
+            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/Owner`, {
                 params: {
                     approvalStatus: false
                 }
@@ -62,7 +62,7 @@ const UsersActivation: React.FC = () => {
             const activeBody = {
                 supplierCode
             };
-            const response = await axios.put(`https://abdoo120-001-site1.ctempurl.com/api/Owner/Active/${selectedOwnerId}`, activeBody, {
+            const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/api/Owner/Active/${selectedOwnerId}`, activeBody, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -84,7 +84,7 @@ const UsersActivation: React.FC = () => {
 
     const unActivateHandle = async (id: string) => {
         try {
-            const response = await axios.delete(`https://abdoo120-001-site1.ctempurl.com/api/Owner/UnActive/${id}`);
+            const response = await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/Owner/UnActive/${id}`);
 
             if (response.status === 200) {
                 console.log("Owner deleted successfully");
@@ -101,7 +101,7 @@ const UsersActivation: React.FC = () => {
     };
 
     const viewProofIdentifier = (url: string) => {
-        const baseUrl = 'https://abdoo120-001-site1.ctempurl.com'; // Your server base URL
+        const baseUrl = import.meta.env.VITE_BASE_URL; // Your server base URL
         const fullUrl = url.startsWith('http') ? url : `${baseUrl}/${url}`;
         window.open(fullUrl, '_blank');
     };

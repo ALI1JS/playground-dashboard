@@ -78,7 +78,7 @@ const PlayersProvider = ({ children }: PlayerProviderProps) => {
   const fetchPlayers = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get('https://abdoo120-001-site1.ctempurl.com/api/Player');
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/Player`);
       if (response.status === 200) {
         storePlayers(response.data);
       } else {

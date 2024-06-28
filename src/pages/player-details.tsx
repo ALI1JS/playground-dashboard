@@ -49,7 +49,7 @@ const PlayerDetails: React.FC = () => {
     useEffect(() => {
         const fetchPlayerDetails = async () => {
             try {
-                const res = await axios.get(`https://abdoo120-001-site1.ctempurl.com/api/Player/${id}`);
+                const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/Player/${id}`);
                 setPlayer(res.data);
                 fetchStadiums(res.data.stadiumReservatation, res.data.ownerReservatation);
             } catch (error: any) {
@@ -65,12 +65,12 @@ const PlayerDetails: React.FC = () => {
     const fetchStadiums = async (stadiumIds: string[], ownerStadiumIds: string[]) => {
         try {
             const stadiumRequests = stadiumIds.map(async (stadiumId) => {
-                const res = await axios.get(`https://abdoo120-001-site1.ctempurl.com/api/Stadium/GetByStadiumId/${stadiumId}`);
+                const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/Stadium/GetByStadiumId/${stadiumId}`);
                 return res.data;
             });
 
             const ownerStadiumRequests = ownerStadiumIds.map(async (ownerStadiumId) => {
-                const res = await axios.get(`https://abdoo120-001-site1.ctempurl.com/api/Owner/${ownerStadiumId}`);
+                const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/Owner/${ownerStadiumId}`);
                 return res.data;
             });
 
@@ -128,7 +128,7 @@ const PlayerDetails: React.FC = () => {
                         </div>
                         {player.proofOfIdentityUrl && (
                             <div className="mt-5">
-                                <a href={`https://abdoo120-001-site1.ctempurl.com/${player.proofOfIdentityUrl}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+                                <a href={`${import.meta.env.VITE_BASE_URL}/${player.proofOfIdentityUrl}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
                                     View Proof of Identity
                                 </a>
                             </div>

@@ -28,7 +28,7 @@ const Feedback: React.FC<FeedbackProps> = ({ reviews, rate }) => {
             const updatedReviews = await Promise.all(
                 reviews.map(async (review) => {
                     try {
-                        const response = await axios.get(`https://abdoo120-001-site1.ctempurl.com/api/Player/${review.playerId}`);
+                        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/Player/${review.playerId}`);
                         const userData = response.data;
                         
                         return {
