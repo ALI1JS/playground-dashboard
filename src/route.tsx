@@ -5,6 +5,9 @@ import UsersActivation from './pages/users-activation';
 import OwnerDetailsPage from './pages/owner-details';
 import PlayersDisplay from './pages/players';
 import PlayerDetails from './pages/player-details';
+import PlayGroundView from './components/owners/playgrounds-view.comp';
+import PlaygroundDetails from './pages/playground-details';
+
 
 export const routers = [
   {
@@ -34,6 +37,10 @@ export const routers = [
   {
     path: "/owner/:id",
     element: <OwnerDetailsPage />,
+  },
+  {
+    path: "/playground/:stadiumId",
+    element: <PlaygroundDetails/>
   },
   {
     path: "*",

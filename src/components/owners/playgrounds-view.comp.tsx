@@ -3,6 +3,7 @@ import TableHead from '../table/head.comp';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import closeIcon from "../../assets/close-icon.png";
+import { Link } from 'react-router-dom';
 
 interface PlayGround {
     stadiumId: string;
@@ -139,6 +140,11 @@ const PlayGroundView: React.FC<PlayGroundViewProps> = ({ playgrounds: initialPla
                                             className="hover:bg-red-600 bg-red-500 text-white font-bold cursor-pointer px-3 py-2 rounded"
                                         >
                                             Delete
+                                        </button>
+                                        <button
+                                            className="hover:bg-green-600 bg-green-500 text-white font-bold cursor-pointer px-3 py-2 rounded"
+                                        >
+                                            <Link to={`/playground/${playground.stadiumId}`}>View</Link>
                                         </button>
                                     </td>
                                 </tr>
