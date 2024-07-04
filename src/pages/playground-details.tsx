@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { StadiumData, StadiumImage, Time, Review } from '../types/playground.types';
+import { StadiumData, Review } from '../types/playground.types';
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/navbar/navbar.com';
 import Nav from '../components/nav/nav.comp';

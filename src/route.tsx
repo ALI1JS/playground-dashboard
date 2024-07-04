@@ -5,7 +5,6 @@ import UsersActivation from './pages/users-activation';
 import OwnerDetailsPage from './pages/owner-details';
 import PlayersDisplay from './pages/players';
 import PlayerDetails from './pages/player-details';
-import PlayGroundView from './components/owners/playgrounds-view.comp';
 import PlaygroundDetails from './pages/playground-details';
 
 
