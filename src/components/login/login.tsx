@@ -83,7 +83,7 @@ const Login: React.FC = () => {
                         <form onSubmit={handleLogin}>
                             <div className="mt-4">
 
-                                <Input type="text" name="email" label="usernamOrEmail" value={adminLoginData.email} handleOnChange={handleOnChange} error={errors.email} />
+                                <Input type="text" name="email" label="usernameOrEmail" value={adminLoginData.email} handleOnChange={handleOnChange} error={errors.email} />
                                 <Input type="password" name="password" label="password" value={adminLoginData.password} handleOnChange={handleOnChange} error={errors.password} />
                                 <div className="flex items-baseline justify-between">
                                     <button type="submit" className="px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900">Login</button>

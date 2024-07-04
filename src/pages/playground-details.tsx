@@ -63,7 +63,7 @@ const PlaygroundDetails: React.FC = () => {
                     <Nav />
                     <div className="flex flex-col gap-20 w-[100%] p-10 bg-slate-100 absolute top-[150px]">
                         {/* First Row */}
-                        <div className="flex items-center mb-4">
+                        <div className="sm:flex gap-5 sm:flex-col lg:flex-row items-center mb-4 ">
                             <div className="w-full md:w-1/2 md:pr-4">
                                 <img
                                     src={`https://hawihub-001-site1.dtempurl.com/${stadium.images[0]?.stadiumImageUrl}`}
