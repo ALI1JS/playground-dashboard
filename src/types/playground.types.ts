@@ -31,7 +31,7 @@ export interface Time {
     images: StadiumImage[];
     rate: number;
     owner: Owner;
-    cityId: number;
+    proofOfOwnershipUrl:string;
   }
   
  export interface Review {

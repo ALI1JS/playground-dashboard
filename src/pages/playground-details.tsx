@@ -20,7 +20,7 @@ const PlaygroundDetails: React.FC = () => {
     const { stadiumId } = useParams<{ stadiumId: string }>();
     const [navbarIsHidden, setNavbarIsHidden] = useState(true);
     const profilePictureUrl = stadium?.owner.ownerProfilePictureUrl ? `${import.meta.env.VITE_BASE_URL}/${stadium.owner.ownerProfilePictureUrl}` : avatarIcon;
-
+   
     const navbarDisplayHandle = (bool: boolean) => {
         setNavbarIsHidden(bool);
     };
@@ -28,8 +28,9 @@ const PlaygroundDetails: React.FC = () => {
     useEffect(() => {
         const fetchStadiumData = async () => {
             try {
-                const response = await axios.get(`https://hawihub-001-site1.dtempurl.com/api/Stadium/GetByStadiumId/${stadiumId}`);
+                const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/Stadium/GetByStadiumId/${stadiumId}`);
                 setStadium(response.data);
+                console.log(response.data);
             } catch (error: any) {
                 toast.error('Error fetching stadium data:', error);
             }
@@ -37,7 +38,7 @@ const PlaygroundDetails: React.FC = () => {
 
         const fetchStadiumReviews = async () => {
             try {
-                const response = await axios.get(`https://hawihub-001-site1.dtempurl.com/api/Stadium/GetStadiumReviews/${stadiumId}`);
+                const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/Stadium/GetStadiumReviews/${stadiumId}`);
                 setReviews(response.data.reviews);
             } catch (error: any) {
                 toast.error('Error fetching stadium reviews:', error);
@@ -51,6 +52,14 @@ const PlaygroundDetails: React.FC = () => {
     if (!stadium) {
         return <div>Loading...</div>;
     }
+
+    const handleOwnershipProofClick = () => {
+        if (stadium.proofOfOwnershipUrl) {
+            window.open(`${import.meta.env.VITE_BASE_URL}/${stadium.proofOfOwnershipUrl}`, '_blank');
+        } else {
+            toast.error('No proof of ownership available.');
+        }
+    };
 
     return (
         <>
@@ -66,11 +75,17 @@ const PlaygroundDetails: React.FC = () => {
                         <div className="sm:flex gap-5 sm:flex-col lg:flex-row items-center mb-4 ">
                             <div className="w-full sm:w-1/4 md:w-1/2 md:pr-4">
                                 <img
-                                    src={`https://hawihub-001-site1.dtempurl.com/${stadium.images[0]?.stadiumImageUrl}`}
+                                    src={`${import.meta.env.VITE_BASE_URL}/${stadium.images[0]?.stadiumImageUrl}`}
                                     alt={stadium.name}
                                     className="rounded-lg mb-4 w-full"
                                 />
                                 <p className="text-gray-600">{stadium.description}</p>
+                                <button
+                                    className="hover:bg-blue-600 bg-blue-500 text-white font-bold cursor-pointer px-3 py-2 rounded mt-4"
+                                    onClick={handleOwnershipProofClick}
+                                >
+                                    View Proof of Ownership
+                                </button>
                             </div>
                             <StadiumOwnerDetails address={stadium.address} location={stadium.location} pricePerHour={stadium.pricePerHour} minHoursReservation={stadium.minHoursReservation} approvalStatus={stadium.approvalStatus} />
                         </div>
@@ -88,7 +103,7 @@ const PlaygroundDetails: React.FC = () => {
                                     <p>{stadium.owner.userName}</p>
                                 </div>
                                 <button
-                                    className='"hover:bg-green-600 bg-green-500 text-white font-bold cursor-pointer px-3 py-2 rounded'>
+                                    className="hover:bg-green-600 bg-green-500 text-white font-bold cursor-pointer px-3 py-2 rounded">
                                     <Link to={`/owner/${stadium.owner.ownerId}`}>View Owner Details</Link></button>
 
                             </div>
