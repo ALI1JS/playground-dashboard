@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import TableHead from '../table/head.comp';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import closeIcon from "../../assets/close-icon.png";
@@ -23,7 +22,7 @@ interface PlayGroundViewProps {
 const PlayGroundView: React.FC<PlayGroundViewProps> = ({ playgrounds: initialPlaygrounds }) => {
     const [playgrounds, setPlaygrounds] = useState<PlayGround[]>(initialPlaygrounds);
     const [expandedTimes, setExpandedTimes] = useState<{ dayOfWeek: number; startTime: string; endTime: string }[]>([]);
-
+   console.log(playgrounds);
     const deleteHandle = async (id: string) => {
         try {
             const response = await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/Stadium/Delete/${id}`);
@@ -74,25 +73,25 @@ const PlayGroundView: React.FC<PlayGroundViewProps> = ({ playgrounds: initialPla
             <div className="overflow-x-auto">
                 <h2 className="font-bold text-slate-400 p-3">All PlayGrounds</h2>
                 <table className="table-auto min-w-full">
-                    <TableHead
-                        label1='Name'
-                        label2="Price/Hour"
-                        label8="Location"
-                        label4="Description"
-                        label5="Min Hours Reservation"
-                        label6="Open Times"
-                        label7="Actions"
-                    />
+                    <thead>
+                        <tr>
+                            <th className="px-4 py-2">Name</th>
+                            <th className="px-4 py-2">Price/Hour</th>
+                            <th className="px-4 py-2">Location</th>
+                            <th className="px-4 py-2">Min Hours Reservation</th>
+                            <th className="px-4 py-2">Open Times</th>
+                            <th className="px-4 py-2">Actions</th>
+                        </tr>
+                    </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                         {playgrounds.length > 0 ? (
                             playgrounds.map((playground) => (
                                 <tr key={playground.stadiumId}>
-                                    <td className="px-4 py-2">{playground.name}</td>
-                                    <td className="px-4 py-2">{playground.pricePerHour}</td>
-                                    <td className="px-4 py-2">{playground.location}</td>
-                                    <td className="px-4 py-2">{playground.description}</td>
-                                    <td className="px-4 py-2">{playground.minHoursReservation}</td>
-                                    <td className="px-4 py-2">
+                                    <td className="pl-10 py-2">{playground.name}</td>
+                                    <td className="pl-16 py-2">{playground.pricePerHour}</td>
+                                    <td className="pl-16 py-2">{playground.location}</td>
+                                    <td className="pl-16 py-2">{playground.minHoursReservation}</td>
+                                    <td className="pl-16 py-2">
                                         {playground.openTimes.slice(0, 1).map((openTime, index) => (
                                             <div key={index}>
                                                 {formatDayOfWeek(openTime.dayOfWeek)}: {openTime.startTime} - {openTime.endTime}
@@ -113,7 +112,7 @@ const PlayGroundView: React.FC<PlayGroundViewProps> = ({ playgrounds: initialPla
                                                 ))}
                                             </div>
                                         )}
-                                        {playground.openTimes.length > 3 && (
+                                        {playground.openTimes.length > 1 && (
                                             <button className="text-blue-500 mt-2" onClick={() => toggleExpandedTimes(playground.openTimes)}>
                                                 View All
                                             </button>
@@ -151,7 +150,7 @@ const PlayGroundView: React.FC<PlayGroundViewProps> = ({ playgrounds: initialPla
                             ))
                         ) : (
                             <tr>
-                                <td colSpan={7} className="text-center font-bold text-xl py-5">
+                                <td colSpan={6} className="text-center font-bold text-xl py-5">
                                     PlayGrounds Not Found
                                 </td>
                             </tr>
