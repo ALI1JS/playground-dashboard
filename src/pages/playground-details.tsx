@@ -64,7 +64,7 @@ const PlaygroundDetails: React.FC = () => {
                     <div className="flex flex-col gap-20 w-[100%] p-10 bg-slate-100 absolute top-[150px]">
                         {/* First Row */}
                         <div className="sm:flex gap-5 sm:flex-col lg:flex-row items-center mb-4 ">
-                            <div className="w-full md:w-1/2 md:pr-4">
+                            <div className="w-full sm:w-1/4 md:w-1/2 md:pr-4">
                                 <img
                                     src={`https://hawihub-001-site1.dtempurl.com/${stadium.images[0]?.stadiumImageUrl}`}
                                     alt={stadium.name}
@@ -89,7 +89,7 @@ const PlaygroundDetails: React.FC = () => {
                                 </div>
                                 <button
                                     className='"hover:bg-green-600 bg-green-500 text-white font-bold cursor-pointer px-3 py-2 rounded'>
-                                    <Link to={`/owners/${stadium.owner.ownerId}`}>View Owner Details</Link></button>
+                                    <Link to={`/owner/${stadium.owner.ownerId}`}>View Owner Details</Link></button>
 
                             </div>
                         </div>
