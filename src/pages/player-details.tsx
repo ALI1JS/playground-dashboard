@@ -98,7 +98,7 @@ const PlayerDetails: React.FC = () => {
     {
       const splitedArray = birthDate.split('-');
       const year:string = splitedArray[0];
-      const month:string = splitedArray[1][1];
+      const month:string = splitedArray[1];
       const day:string = splitedArray[2][0] + splitedArray[2][1]; 
       return `${year} - ${month} - ${day}`;
     }
