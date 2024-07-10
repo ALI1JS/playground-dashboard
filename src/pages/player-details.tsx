@@ -11,6 +11,7 @@ import defaultAvatar from "../assets/avatar.png"; // Import default avatar image
 interface PlayerDetailsProps {
     id: string;
     userName: string;
+    birthDate: string;
     age: number;
     email: string;
     profilePictureUrl?: string;
@@ -42,6 +43,7 @@ const PlayerDetails: React.FC = () => {
     const [stadiumInfos, setStadiumInfos] = useState<StadiumInfo[]>([]);
     const [ownerInfo, setOwnerInfo] = useState<OwnerInfo[]>([]);
 
+
     const navbarDisplayHandle = (bool: boolean) => {
         setNavbarIsHidden(bool);
     };
@@ -51,6 +53,7 @@ const PlayerDetails: React.FC = () => {
             try {
                 const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/Player/${id}`);
                 setPlayer(res.data);
+                console.log(res.data);
                 fetchStadiums(res.data.stadiumReservatation, res.data.ownerReservatation);
             } catch (error: any) {
                 toast.error('Error fetching player details:', error);
@@ -90,6 +93,15 @@ const PlayerDetails: React.FC = () => {
             toast.error('Error fetching stadium details:', error);
         }
     };
+    
+    const birthDateFormate = (birthDate:string):string =>
+    {
+      const splitedArray = birthDate.split('-');
+      const year:string = splitedArray[0];
+      const month:string = splitedArray[1][1];
+      const day:string = splitedArray[2][0] + splitedArray[2][1]; 
+      return `${year} - ${month} - ${day}`;
+    }
 
     if (!player) {
         return <div>Loading...</div>;
@@ -120,9 +132,13 @@ const PlayerDetails: React.FC = () => {
                                 <img className="w-20 h-20 rounded-full" src={avatarUrl} alt="avatar-image" />
                                 <h2 className="font-bold text-xl">{player.userName}</h2>
                             </div>
-                            <div>
+                            <div className='flex flex-col gap-5'>
                                 <p className="font-bold text-xl">
                                     Email: <span className="text-sm text-slate-500">{player.email}</span>
+                                </p>
+
+                                <p className="font-bold text-xl">
+                                    Birth Date: <span className="text-sm text-slate-500">{birthDateFormate(player.birthDate)}</span>
                                 </p>
                             </div>
                         </div>
