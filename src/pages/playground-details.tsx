@@ -30,7 +30,6 @@ const PlaygroundDetails: React.FC = () => {
             try {
                 const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/Stadium/GetByStadiumId/${stadiumId}`);
                 setStadium(response.data);
-                console.log(response.data);
             } catch (error: any) {
                 toast.error('Error fetching stadium data:', error);
             }

@@ -1,15 +1,9 @@
 import React, { useState } from "react";
 import Input from "../login/input.comp";
-import closeIcon from "../../assets/close-icon.png";
 import toast from "react-hot-toast";
 import axios from "axios";
 
-interface BannerFormProps {
-    isHidden: boolean;
-    addBannerHandle: (isAdded: boolean) => void;
-}
-
-const BannerForm: React.FC<BannerFormProps> = ({ isHidden, addBannerHandle }) => {
+const BannerForm = () => {
     const [image, setImage] = useState<File | null>(null);
     const [bannerImageUrl, setImageUrl] = useState<string>('');
 
@@ -67,7 +61,6 @@ const BannerForm: React.FC<BannerFormProps> = ({ isHidden, addBannerHandle }) =>
                 toast.success('Banner added successfully!');
                 setImage(null);
                 setImageUrl('');
-                addBannerHandle(true);
             } else {
                 toast.error('Failed to add Banner: ' + response.data.message);
             }
@@ -77,10 +70,9 @@ const BannerForm: React.FC<BannerFormProps> = ({ isHidden, addBannerHandle }) =>
     };
 
     return (
-        <div className={`${isHidden ? 'hidden' : ''} bg-white rounded p-5 shadow-md absolute z-10 top-[30%] sm:left-[400px] transition-transform w-[300px]`}>
+        <div className={`w-[70vw] md:w-[50vw] bg-white rounded p-5 shadow-md transition-transform`}>
             <div className='relative flex justify-center'>
                 <h2 className="text-2xl font-bold mb-4 text-center">Add Banner</h2>
-                <img onClick={() => { addBannerHandle(false) }} className='w-6 h-6 absolute right-0 cursor-pointer' src={closeIcon} alt='close-icon' />
             </div>
             <form className="flex flex-col gap-5 justify-center">
                 <Input type="file" name="category-image" label="Upload Image" accept="image/*" handleOnChange={handleImageChange} />

@@ -22,7 +22,7 @@ interface PlayGroundViewProps {
 const PlayGroundView: React.FC<PlayGroundViewProps> = ({ playgrounds: initialPlaygrounds }) => {
     const [playgrounds, setPlaygrounds] = useState<PlayGround[]>(initialPlaygrounds);
     const [expandedTimes, setExpandedTimes] = useState<{ dayOfWeek: number; startTime: string; endTime: string }[]>([]);
-   console.log(playgrounds);
+
     const deleteHandle = async (id: string) => {
         try {
             const response = await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/Stadium/Delete/${id}`);

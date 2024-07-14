@@ -85,8 +85,6 @@ const OwnerDetailsPage: React.FC = () => {
     return <div>No owner found</div>;
   }
 
-  // Set the profile picture URL to the default avatar if it's null or empty
-
   return (
     <div className="flex gap-5 w-[100vw] min-h-[100vh] relative">
       <div className="w-8 h-8 ml-5 absolute mt-10 cursor-pointer xl:hidden">

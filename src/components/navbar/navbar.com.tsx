@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import AddCatoggery from '../catogery/add-catogery.comp';
 import AddBanner from '../banner/add-banner.comp';
 import closeIcon from "../../assets/close-icon.png";
 import homeIcon from "../../assets/home.png";
+import addCatogeryIcon from "../../assets/plus.png";
 import ownersIcon from "../../assets/users.png";
 import activeIcon from "../../assets/active-user.png";
 import ViewCategories from '../catogery/view-catogery';
@@ -30,15 +30,15 @@ const Navbar: React.FC<NavbarProps> = (props) => {
         <Link className='flex gap-3' to="/unactive-owners"> <img className='w-6 h-6' src={activeIcon} alt="home-icon"/>UnActive Owners</Link>
         <Link className='flex gap-3' to="/active-players"> <img className='w-6 h-6' src={ownersIcon} alt="home-icon"/>All Players</Link>
       </div>
-      <div className='flex flex-col bg-slate-100 p-5'>
+      <div className='flex flex-col bg-slate-100 p-5 gap-3'>
         <h2 className='font-bold text-2xl'>Catogery</h2>
-         <AddCatoggery />
-         <ViewCategories/>
+        <Link className='flex gap-3 font-bold text-md' to="/add-catogery"> <img className='w-5 h-5' src={addCatogeryIcon} alt="catogery-icon"/>Add catogery</Link>
+        <Link className='flex gap-3 font-bold text-md' to="/catogeries"> <img className='w-5 h-5' src={addCatogeryIcon} alt="catogery-icon"/>View catogeries</Link>
       </div>
-      <div className='flex flex-col bg-slate-100 p-5'>
+      <div className='flex gap-2 flex-col bg-slate-100 p-5'>
         <h2 className='font-bold text-2xl'>Banners</h2>
-        <AddBanner />
-        <ViewBanner/>
+        <Link className='flex gap-3 font-bold text-md' to="/add-banner"> <img className='w-5 h-5' src={addCatogeryIcon} alt="catogery-icon"/>Add Banner</Link>
+        <Link className='flex gap-3 font-bold text-md' to="/banners"> <img className='w-5 h-5' src={addCatogeryIcon} alt="catogery-icon"/>View Banners</Link>
       </div>
     </div>
   );

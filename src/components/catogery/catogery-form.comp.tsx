@@ -1,15 +1,10 @@
 import React, { useState } from "react";
 import Input from "../login/input.comp";
-import closeIcon from "../../assets/close-icon.png";
 import toast from "react-hot-toast";
 import axios from "axios";
 
-interface CatogeryFormProps {
-    isHidden: boolean;
-    addCatogeryHandle: (isAdded: boolean) => void;
-}
 
-const CatogeryForm: React.FC<CatogeryFormProps> = ({ isHidden, addCatogeryHandle }) => {
+const CatogeryForm = () => {
     const [image, setImage] = useState<File | null>(null);
     const [categoryImageUrl, setImageUrl] = useState<string>('');
     const [nameAr, setNameAr] = useState<string>('');
@@ -44,7 +39,6 @@ const CatogeryForm: React.FC<CatogeryFormProps> = ({ isHidden, addCatogeryHandle
                 toast.error('Failed to upload image: ' + response.data.message);
             }
         } catch (error: any) {
-            console.error('Error uploading image:', error);
             toast.error('Error uploading image: ' + error.message);
         }
     };
@@ -81,22 +75,18 @@ const CatogeryForm: React.FC<CatogeryFormProps> = ({ isHidden, addCatogeryHandle
                 setImage(null);
                 setImageUrl('');
                 setNameAr('');
-                setNameEn('');
-                addCatogeryHandle(true);
-            } else {
+                setNameEn('');            } else {
                 toast.error('Failed to add category: ' + response.data.message);
             }
         } catch (error: any) {
-            console.error('Error adding category:', error);
             toast.error('Error adding category: ' + error.message);
         }
     };
 
     return (
-        <div className={`${isHidden ? 'hidden' : ''} bg-white rounded p-5 shadow-md absolute z-10 top-[30%] sm:left-[400px] transition-transform w-[300px]`}>
-            <div className='relative flex justify-center'>
+        <div className={`w-[70vw] md:w-[30vw] lg:w-[50vw] bg-white rounded p-5 shadow-md transition-transform`}>
+            <div className='flex justify-center'>
                 <h2 className="text-2xl font-bold mb-4 text-center">Add Category</h2>
-                <img onClick={() => { addCatogeryHandle(true) }} className='w-6 h-6 absolute right-0 cursor-pointer' src={closeIcon} alt='close-icon' />
             </div>
             <form className="flex flex-col gap-5 justify-center" onSubmit={handleAddCategory}>
                 <Input type="file" name="category-image" label="Upload Image" accept="image/*" handleOnChange={handleImageChange} />

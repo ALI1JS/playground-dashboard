@@ -6,6 +6,10 @@ import OwnerDetailsPage from './pages/owner-details';
 import PlayersDisplay from './pages/players';
 import PlayerDetails from './pages/player-details';
 import PlaygroundDetails from './pages/playground-details';
+import AddCatogeryPage from './pages/add-catogery-page';
+import ViewCatogeryPage from './pages/catogeries';
+import AddBannerPage from './pages/add-banner-page';
+import ViewBannerPage from './pages/banners';
 
 
 export const routers = [
@@ -40,6 +44,22 @@ export const routers = [
   {
     path: "/playground/:stadiumId",
     element: <PlaygroundDetails/>
+  },
+  {
+    path: "/add-catogery",
+    element: <AddCatogeryPage/>
+  },
+  {
+    path: "/catogeries",
+    element: <ViewCatogeryPage/>
+  },
+  {
+    path: "/add-banner",
+    element: <AddBannerPage/>
+  },
+  {
+    path: "/banners",
+    element: <ViewBannerPage/>
   },
   {
     path: "*",
