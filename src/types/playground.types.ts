@@ -35,7 +35,7 @@ export interface Time {
   }
   
  export interface Review {
-    playerId: string;
+    reviewerId: string;
     userName: string;
     profilePictureUrl: string;
     comment: string;

@@ -1,13 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import AddBanner from '../banner/add-banner.comp';
 import closeIcon from "../../assets/close-icon.png";
 import homeIcon from "../../assets/home.png";
 import addCatogeryIcon from "../../assets/plus.png";
 import ownersIcon from "../../assets/users.png";
 import activeIcon from "../../assets/active-user.png";
-import ViewCategories from '../catogery/view-catogery';
-import ViewBanner from '../banner/view-banner.comp';
 
 
 interface NavbarProps {
