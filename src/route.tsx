@@ -10,6 +10,7 @@ import AddCatogeryPage from './pages/add-catogery-page';
 import ViewCatogeryPage from './pages/catogeries';
 import AddBannerPage from './pages/add-banner-page';
 import ViewBannerPage from './pages/banners';
+import PlaygroundPage from './pages/playgrounds.pages';
 
 
 export const routers = [
@@ -62,7 +63,11 @@ export const routers = [
     element: <ViewBannerPage/>
   },
   {
+    path: "/playgrounds",
+    element: <PlaygroundPage/>
+  },
+  {
     path: "*",
-    element: <h2 className='text-center'>Page Not Found</h2>
+    element: <h2 className='text-center text-blue-600 text-2xl'>Page Not Found</h2>
   }
 ]

@@ -26,6 +26,7 @@ const Navbar: React.FC<NavbarProps> = (props) => {
         <Link className='flex gap-3' to="/active-owners"> <img className='w-6 h-6' src={ownersIcon} alt="home-icon"/>Active Owners</Link>
         <Link className='flex gap-3' to="/unactive-owners"> <img className='w-6 h-6' src={activeIcon} alt="home-icon"/>UnActive Owners</Link>
         <Link className='flex gap-3' to="/active-players"> <img className='w-6 h-6' src={ownersIcon} alt="home-icon"/>All Players</Link>
+        <Link className='flex gap-3' to="/playgrounds"> <img className='w-6 h-6' src={ownersIcon} alt="home-icon"/>All PlayGrounds</Link>
       </div>
       <div className='flex flex-col bg-slate-100 p-5 gap-3'>
         <h2 className='font-bold text-2xl'>Catogery</h2>
