@@ -1,7 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
 import Navbar from "../components/navbar/navbar.com";
-import DisplayNumbers from "../components/numberCart/number-cart";
-import OwnerView from "../components/owners/owners.viewcomp";
 import Nav from "../components/nav/nav.comp";
 import humbrgerBar from "../assets/menu-icon.png";
 import { OwnersContext } from "../context/ownersContext";
@@ -9,7 +7,7 @@ import PlaygroundList from "../components/playgroundlist";
 
 const PlaygroundPage: React.FC = () => {
   const [navbarIsHidden, setNavbarIsHidden] = useState(true);
-  const { fetchOwners, totalOwners } = useContext(OwnersContext);
+  const { fetchOwners } = useContext(OwnersContext);
 
   const navbarDisplayHandle = () => {
     setNavbarIsHidden(!navbarIsHidden);
