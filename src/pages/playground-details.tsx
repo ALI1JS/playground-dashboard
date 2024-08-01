@@ -13,14 +13,13 @@ import OpenTime from '../components/playground/open-time';
 import DisplayImages from '../components/playground/display-images';
 import StadiumOwnerDetails from '../components/playground/playground-owner-details';
 
-
 const PlaygroundDetails: React.FC = () => {
     const [stadium, setStadium] = useState<StadiumData | null>(null);
     const [reviews, setReviews] = useState<Review[]>([]);
     const { stadiumId } = useParams<{ stadiumId: string }>();
     const [navbarIsHidden, setNavbarIsHidden] = useState(true);
     const profilePictureUrl = stadium?.owner.ownerProfilePictureUrl ? `${import.meta.env.VITE_BASE_URL}/${stadium.owner.ownerProfilePictureUrl}` : avatarIcon;
-   
+
     const navbarDisplayHandle = (bool: boolean) => {
         setNavbarIsHidden(bool);
     };
@@ -57,6 +56,27 @@ const PlaygroundDetails: React.FC = () => {
             window.open(`${import.meta.env.VITE_BASE_URL}/${stadium.proofOfOwnershipUrl}`, '_blank');
         } else {
             toast.error('No proof of ownership available.');
+        }
+    };
+
+    const handleActivateClick = async () => {
+        try {
+            await axios.put(`${import.meta.env.VITE_BASE_URL}/api/Stadium/Active/${stadiumId}`);
+            toast.success('Stadium activated successfully');
+            setStadium((prevStadium) => prevStadium ? { ...prevStadium, approvalStatus: 1 } : prevStadium);
+        } catch (error: any) {
+            toast.error('Error activating stadium:', error);
+        }
+    };
+
+    const handleDeactivateClick = async () => {
+        try {
+            await axios.put(`${import.meta.env.VITE_BASE_URL}/api/Stadium/UnActive/${stadiumId}`);
+            toast.success('Stadium un activated successfully');
+            setStadium((prevStadium) => prevStadium ? { ...prevStadium, approvalStatus: 0 } : prevStadium);
+        } catch (error: any) {
+            toast.error('Error un activating stadium:', error);
+            console.log(error)
         }
     };
 
@@ -103,8 +123,8 @@ const PlaygroundDetails: React.FC = () => {
                                 </div>
                                 <button
                                     className="hover:bg-green-600 bg-green-500 text-white font-bold cursor-pointer px-3 py-2 rounded">
-                                    <Link to={`/owner/${stadium.owner.ownerId}`}>View Owner Details</Link></button>
-
+                                    <Link to={`/owner/${stadium.owner.ownerId}`}>View Owner Details</Link>
+                                </button>
                             </div>
                         </div>
                         <OpenTime time={stadium.openTimes} />
@@ -112,6 +132,22 @@ const PlaygroundDetails: React.FC = () => {
                         {/* Fourth Row */}
                         <DisplayImages stadiumImages={stadium.images} />
                         <Feedback reviews={reviews} rate={stadium.rate} />
+                        <div className="flex gap-4 mt-4">
+                            <button
+                                className={`text-white font-bold cursor-pointer px-3 py-2 rounded ${stadium.approvalStatus === 1 ? 'bg-gray-400 cursor-not-allowed' : 'hover:bg-green-600 bg-green-500'}`}
+                                onClick={handleActivateClick}
+                                disabled={stadium.approvalStatus === 1}
+                            >
+                                Activate
+                            </button>
+                            <button
+                                className={`text-white font-bold cursor-pointer px-3 py-2 rounded ${stadium.approvalStatus === 0 ? 'bg-gray-400 cursor-not-allowed' : 'hover:bg-red-600 bg-red-500'}`}
+                                onClick={handleDeactivateClick}
+                                disabled={stadium.approvalStatus === 0}
+                            >
+                                Un Activate
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

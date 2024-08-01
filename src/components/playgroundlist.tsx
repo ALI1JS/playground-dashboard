@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 interface Playground {
   stadiumId: number;
@@ -54,6 +56,34 @@ const PlaygroundList: React.FC = () => {
     applyFilters();
   }, [statusFilter, cityFilter, playgrounds]);
 
+  const handleActivateClick = async (stadiumId: number) => {
+    try {
+      await axios.put(`${import.meta.env.VITE_BASE_URL}/api/Stadium/Active/${stadiumId}`);
+      toast.success('Stadium activated successfully');
+      setPlaygrounds(prevPlaygrounds =>
+        prevPlaygrounds.map(playground =>
+          playground.stadiumId === stadiumId ? { ...playground, approvalStatus: 1 } : playground
+        )
+      );
+    } catch (error: any) {
+      toast.error('Error activating stadium:', error);
+    }
+  };
+
+  const handleDeactivateClick = async (stadiumId: number) => {
+    try {
+      await axios.put(`${import.meta.env.VITE_BASE_URL}/api/Stadium/UnActive/${stadiumId}`);
+      toast.success('Stadium deactivated successfully');
+      setPlaygrounds(prevPlaygrounds =>
+        prevPlaygrounds.map(playground =>
+          playground.stadiumId === stadiumId ? { ...playground, approvalStatus: 0 } : playground
+        )
+      );
+    } catch (error: any) {
+      toast.error('Error deactivating stadium:', error);
+    }
+  };
+
   return (
     <div className="p-4">
       <div className="mb-4 flex space-x-4">
@@ -89,6 +119,21 @@ const PlaygroundList: React.FC = () => {
             <Link className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 w-32" to={`/playground/${playground.stadiumId}`}>
               View Details
             </Link>
+            <div className="flex gap-4 mt-4">
+              <button
+                className={`text-white font-bold cursor-pointer px-3 py-2 rounded ${playground.approvalStatus === 1 ? 'bg-gray-400 cursor-not-allowed' : 'hover:bg-green-600 bg-green-500'}`}
+                onClick={() => handleActivateClick(playground.stadiumId)}
+                disabled={playground.approvalStatus === 1}
+              >
+                Activate
+              </button>
+              <button
+                className="hover:bg-red-600 bg-red-500 text-white font-bold cursor-pointer px-3 py-2 rounded"
+                onClick={() => handleDeactivateClick(playground.stadiumId)}
+              >
+                Un activate
+              </button>
+            </div>
           </div>
         ))}
       </div>
