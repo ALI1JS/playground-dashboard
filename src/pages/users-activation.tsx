@@ -62,7 +62,7 @@ const UsersActivation: React.FC = () => {
             const activeBody = {
                 supplierCode
             };
-            const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/api/Owner/Active/${selectedOwnerId}`, activeBody, {
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Owner/Active/${selectedOwnerId}`, activeBody, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -82,23 +82,23 @@ const UsersActivation: React.FC = () => {
         }
     };
 
-    const unActivateHandle = async (id: string) => {
-        try {
-            const response = await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/Owner/UnActive/${id}`);
+    // const unActivateHandle = async (id: string) => {
+    //     try {
+    //         const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Owner/UnActive/${id}`);
 
-            if (response.status === 200) {
-                console.log("Owner deleted successfully");
-                // Remove deleted owner from state
-                setOwners(prevOwners => prevOwners.filter(owner => owner.ownerId !== id));
-                toast.success('Owner deleted successfully');
-            } else {
-                throw new Error('Failed to delete owner');
-            }
-        } catch (error:any) {
-            console.error('Error deleting owner:', error);
-            toast.error('Failed to delete owner');
-        }
-    };
+    //         if (response.status === 200) {
+    //             console.log("Owner deleted successfully");
+    //             // Remove deleted owner from state
+    //             setOwners(prevOwners => prevOwners.filter(owner => owner.ownerId !== id));
+    //             toast.success('Owner deleted successfully');
+    //         } else {
+    //             throw new Error('Failed to delete owner');
+    //         }
+    //     } catch (error:any) {
+    //         console.error('Error deleting owner:', error);
+    //         toast.error('Failed to delete owner');
+    //     }
+    // };
 
     const viewProofIdentifier = (url: string) => {
         const baseUrl = import.meta.env.VITE_BASE_URL; // Your server base URL
@@ -139,7 +139,7 @@ const UsersActivation: React.FC = () => {
                                             label2={owner.email}
                                             label3={owner.proofOfIdentityUrl}
                                             activate={() => handleActivateClick(owner.ownerId)}
-                                            unActivate={() => unActivateHandle(owner.ownerId)}
+                                            // delete={() => unActivateHandle(owner.ownerId)}
                                             viewProofIdentifier={() => viewProofIdentifier(owner.proofOfIdentityUrl)}
                                             view={viewHandle}
                                         />

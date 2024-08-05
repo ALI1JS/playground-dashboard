@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Navbar from '../components/navbar/navbar.com';
 import Nav from '../components/nav/nav.comp';
 import DisplayNumbers from '../components/numberCart/number-cart';
@@ -42,6 +42,7 @@ const PlayerDetails: React.FC = () => {
     const [navbarIsHidden, setNavbarIsHidden] = useState(true);
     const [stadiumInfos, setStadiumInfos] = useState<StadiumInfo[]>([]);
     const [ownerInfo, setOwnerInfo] = useState<OwnerInfo[]>([]);
+    const navigate = useNavigate();
 
 
     const navbarDisplayHandle = (bool: boolean) => {
@@ -53,7 +54,6 @@ const PlayerDetails: React.FC = () => {
             try {
                 const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/Player/${id}`);
                 setPlayer(res.data);
-                console.log(res.data);
                 fetchStadiums(res.data.stadiumReservatation, res.data.ownerReservatation);
             } catch (error: any) {
                 toast.error('Error fetching player details:', error);
@@ -102,7 +102,20 @@ const PlayerDetails: React.FC = () => {
       const day:string = splitedArray[2][0] + splitedArray[2][1]; 
       return `${year} - ${month} - ${day}`;
     }
-
+    const deleteHandle = async (id: string) => {
+        try {
+          const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/Owner/Delete/${id}`);
+    
+          if (res.status === 200) {
+            toast.success('The Owner deleted successfully');
+            navigate(-1)
+          } else {
+            throw new Error("The Owner isn't deleted, try again");
+          }
+        } catch (error: any) {
+          toast.error(error.message);
+        }
+      };
     if (!player) {
         return <div>Loading...</div>;
     }
@@ -191,6 +204,8 @@ const PlayerDetails: React.FC = () => {
                             </div>
                         </div>
                     )}
+                     <button onClick={()=>{deleteHandle(player.id)}} className='w-40 px-8 py-3 cursor-pointer rounded bg-red-500 hover:bg-red-600 font-bold'>Delete</button>
+
                 </div>
             </div>
         </div>

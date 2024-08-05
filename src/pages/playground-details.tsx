@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { StadiumData, Review } from '../types/playground.types';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import Navbar from '../components/navbar/navbar.com';
 import Nav from '../components/nav/nav.comp';
 import humbrgerBar from "../assets/menu-icon.png";
 import toast from 'react-hot-toast';
 import Feedback from '../components/owners/clients-feedback.comp';
-import { Link } from 'react-router-dom';
 import avatarIcon from "../assets/avatar.png";
 import OpenTime from '../components/playground/open-time';
 import DisplayImages from '../components/playground/display-images';
@@ -69,16 +68,26 @@ const PlaygroundDetails: React.FC = () => {
         }
     };
 
-    const handleDeactivateClick = async () => {
+    const handleUnactivateClick = async () => {
         try {
-            await axios.put(`${import.meta.env.VITE_BASE_URL}/api/Stadium/UnActive/${stadiumId}`);
-            toast.success('Stadium un activated successfully');
+            await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Stadium/UnActive/${stadiumId}`);
+            toast.success('Stadium deactivated successfully');
             setStadium((prevStadium) => prevStadium ? { ...prevStadium, approvalStatus: 0 } : prevStadium);
         } catch (error: any) {
-            toast.error('Error un activating stadium:', error);
-            console.log(error)
+            toast.error('Error deactivating stadium:', error);
         }
     };
+
+    const handleDeleteClick = async () => {
+        try {
+            await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/Stadium/Delete/${stadiumId}`);
+            toast.success('Stadium deleted successfully');
+            // Redirect or perform other actions after deletion
+        } catch (error: any) {
+            toast.error('Error deleting stadium:', error);
+        }
+    };
+    
 
     return (
         <>
@@ -91,7 +100,7 @@ const PlaygroundDetails: React.FC = () => {
                     <Nav />
                     <div className="flex flex-col gap-20 w-[100%] p-10 bg-slate-100 absolute top-[150px]">
                         {/* First Row */}
-                        <div className="sm:flex gap-5 sm:flex-col lg:flex-row items-center mb-4 ">
+                        <div className="sm:flex gap-5 sm:flex-col lg:flex-row items-center mb-4">
                             <div className="w-full sm:w-1/4 md:w-1/2 md:pr-4">
                                 <img
                                     src={`${import.meta.env.VITE_BASE_URL}/${stadium.images[0]?.stadiumImageUrl}`}
@@ -142,10 +151,16 @@ const PlaygroundDetails: React.FC = () => {
                             </button>
                             <button
                                 className={`text-white font-bold cursor-pointer px-3 py-2 rounded ${stadium.approvalStatus === 0 ? 'bg-gray-400 cursor-not-allowed' : 'hover:bg-red-600 bg-red-500'}`}
-                                onClick={handleDeactivateClick}
+                                onClick={handleUnactivateClick}
                                 disabled={stadium.approvalStatus === 0}
                             >
-                                Un Activate
+                                Unactivate
+                            </button>
+                            <button
+                                className="hover:bg-red-600 bg-red-500 text-white font-bold cursor-pointer px-3 py-2 rounded"
+                                onClick={handleDeleteClick}
+                            >
+                                Delete
                             </button>
                         </div>
                     </div>

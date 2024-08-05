@@ -12,6 +12,7 @@ import toast from 'react-hot-toast';
 const OwnersDisplay: React.FC = () => {
   const [navbarIsHidden, setNavbarIsHidden] = useState(true);
   const { displayedOwners, loadMoreOwners, fetchOwners, totalOwners } = useContext(OwnersContext);
+  const [owners, setOwners] = useState(displayedOwners);
 
   const navbarDisplayHandle = () => {
     setNavbarIsHidden(!navbarIsHidden);
@@ -21,15 +22,15 @@ const OwnersDisplay: React.FC = () => {
     console.log('View owner');
   };
 
-  const deleteOwner = async (id: string) => {
+  const UnActive = async (id: string) => {
     try {
-      const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/Owner/UnActive/${id}`);
+      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Owner/UnActive/${id}`);
 
       if (res.status === 200) {
-        toast.success('The Owner Deleted Successfully');
-        fetchOwners();
+        toast.success('The Owner deactivated successfully');
+        setOwners(owners.filter(owner => owner.ownerId !== id));
       } else {
-        throw new Error("The Owner isn't deleted, try again");
+        throw new Error("The Owner isn't deactivated, try again");
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -37,7 +38,7 @@ const OwnersDisplay: React.FC = () => {
   };
 
   const viewProofIdentifier = (url: string) => {
-    const baseUrl = import.meta.env.VITE_BASE_URL;
+    const baseUrl = import.meta.env.VITE_BASE_URL; // Your server base URL
     const fullUrl = url.startsWith('http') ? url : `${baseUrl}/${url}`;
     window.open(fullUrl, '_blank');
   };
@@ -45,6 +46,10 @@ const OwnersDisplay: React.FC = () => {
   useEffect(() => {
     fetchOwners();
   }, [fetchOwners]);
+
+  useEffect(() => {
+    setOwners(displayedOwners);
+  }, [displayedOwners]);
 
   const handleLoadMore = () => {
     const moreOwnersLoaded = loadMoreOwners();
@@ -78,22 +83,24 @@ const OwnersDisplay: React.FC = () => {
                   label7="Actions"
                 />
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {Array.isArray(displayedOwners) ? (
-                    displayedOwners.map((owner) => (
+                  {Array.isArray(owners) ? (
+                    owners.map((owner) => (
                       <OwnerRow
                         key={owner.ownerId}
                         id={owner.ownerId}
                         label1={owner.userName}
                         label2={owner.email}
                         label3={owner.proofOfIdentityUrl}
-                        delete={() => deleteOwner(owner.ownerId)}
-                        viewProofIdentifier={viewProofIdentifier}
+                        unActivate={() => UnActive(owner.ownerId)}
+                        viewProofIdentifier={owner.proofOfIdentityUrl ? () => viewProofIdentifier(owner.proofOfIdentityUrl!) : undefined}
                         view={viewHandle}
                       />
                     ))
                   ) : (
                     <tr>
-                      <td className='font-bold text-xl text-center' colSpan={4}>Loading...</td>
+                      <td className="font-bold text-xl text-center" colSpan={4}>
+                        Loading...
+                      </td>
                     </tr>
                   )}
                 </tbody>

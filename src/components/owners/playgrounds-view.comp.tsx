@@ -23,23 +23,27 @@ const PlayGroundView: React.FC<PlayGroundViewProps> = ({ playgrounds: initialPla
     const [playgrounds, setPlaygrounds] = useState<PlayGround[]>(initialPlaygrounds);
     const [expandedTimes, setExpandedTimes] = useState<{ dayOfWeek: number; startTime: string; endTime: string }[]>([]);
 
-    const deleteHandle = async (id: string) => {
+    const unActivateHandle = async (id: string) => {
         try {
-            const response = await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/Stadium/Delete/${id}`);
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Stadium/UnActive/${id}`);
             if (response.status === 200) {
-                setPlaygrounds(prevPlaygrounds => prevPlaygrounds.filter(playground => playground.stadiumId !== id));
-                toast.success('Playground deleted successfully');
+                setPlaygrounds(prevPlaygrounds =>
+                    prevPlaygrounds.map(playground =>
+                        playground.stadiumId === id ? { ...playground, approvalStatus: false } : playground
+                    )
+                );
+                toast.success('Playground deactivated successfully');
             } else {
-                toast.error('Failed to delete playground');
+                toast.error('Failed to deactivate playground');
             }
         } catch (error: any) {
-            toast.error('Error deleting playground: ' + error.message);
+            toast.error('Error deactivating playground: ' + error.message);
         }
     };
 
     const activateHandle = async (id: string) => {
         try {
-            const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/api/Stadium/Active/${id}`);
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Stadium/Active/${id}`);
             if (response.status === 200) {
                 setPlaygrounds(prevPlaygrounds =>
                     prevPlaygrounds.map(playground =>
@@ -121,10 +125,10 @@ const PlayGroundView: React.FC<PlayGroundViewProps> = ({ playgrounds: initialPla
                                     <td className="px-4 py-2 flex gap-2">
                                         {playground.approvalStatus ? (
                                             <button
-                                                className="bg-gray-500 text-white font-bold cursor-not-allowed px-3 py-2 rounded"
-                                                disabled
+                                                onClick={() => unActivateHandle(playground.stadiumId)}
+                                                className="hover:bg-red-600 bg-red-500 text-white font-bold cursor-pointer px-3 py-2 rounded"
                                             >
-                                                Active
+                                                Unactivate
                                             </button>
                                         ) : (
                                             <button
@@ -134,12 +138,6 @@ const PlayGroundView: React.FC<PlayGroundViewProps> = ({ playgrounds: initialPla
                                                 Activate
                                             </button>
                                         )}
-                                        <button
-                                            onClick={() => deleteHandle(playground.stadiumId)}
-                                            className="hover:bg-red-600 bg-red-500 text-white font-bold cursor-pointer px-3 py-2 rounded"
-                                        >
-                                            Delete
-                                        </button>
                                         <button
                                             className="hover:bg-green-600 bg-green-500 text-white font-bold cursor-pointer px-3 py-2 rounded"
                                         >

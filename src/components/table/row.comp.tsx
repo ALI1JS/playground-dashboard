@@ -49,12 +49,12 @@ const OwnerRow: React.FC<OwnerProps> = ({
       <td className="px-4 py-2">{label1}</td>
       <td className="px-4 py-2">{label2}</td>
       <td className="px-4 py-2">
-        {label3 && ( // Render only if label3 is defined and not empty
-          <a href="#" onClick={handleViewProofClick}>
+        {label3 && (
+          <a href="#" onClick={handleViewProofClick} className="text-blue-500 hover:underline">
             View Proof
           </a>
         )}
-        {label7 && !label3 && ( // Render label7 only if label3 is not present
+        {label7 && !label3 && (
           <p>{label7}</p>
         )}
       </td>
@@ -63,20 +63,20 @@ const OwnerRow: React.FC<OwnerProps> = ({
       <td className="px-4 py-2">{label6}</td>
       <td className="px-4 py-2 flex gap-2">
         {activate && (
-          <>
-            <button
-              onClick={activate}
-              className="hover:bg-blue-600 bg-blue-500 text-white font-bold cursor-pointer px-3 py-2 rounded"
-            >
-              Activate
-            </button>
-            <button
-              onClick={unActivate}
-              className="hover:bg-red-600 bg-red-500 text-white font-bold cursor-pointer px-3 py-2 rounded"
-            >
-              UnActivate
-            </button>
-          </>
+          <button
+            onClick={activate}
+            className="hover:bg-blue-600 bg-blue-500 text-white font-bold cursor-pointer px-3 py-2 rounded"
+          >
+            Activate
+          </button>
+        )}
+        {unActivate && (
+          <button
+            onClick={unActivate}
+            className="hover:bg-red-600 bg-red-500 text-white font-bold cursor-pointer px-3 py-2 rounded"
+          >
+            UnActivate
+          </button>
         )}
         {deleteOwner && (
           <button

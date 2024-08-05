@@ -21,9 +21,9 @@ const PlayersDisplay: React.FC = () => {
     navigate(`/player/${id}`);
   };
 
-  const deletePlayer = async (id: string) => {
+  const unActive = async (id: string) => {
     try {
-      const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/Player/UnActive/${id}`);
+      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Player/UnActive/${id}`);
 
       if (res.status === 200) {
         toast.success('The Player Deleted Successfully');
@@ -48,7 +48,7 @@ const PlayersDisplay: React.FC = () => {
 
   const activatePlayer = async (id: string) => {
     try {
-      const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/api/Player/Active/${id}`);
+      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Player/Active/${id}`);
 
       if (res.status === 200) {
         toast.success('The Player Activated Successfully');
@@ -130,31 +130,29 @@ const PlayersDisplay: React.FC = () => {
                         </td>
                         <td className="flex gap-3 px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           <button
-                            className={`px-6 py-3 font-bold rounded text-white bg-red-600 hover:bg-red-800`}
-                            onClick={() => deletePlayer(player.playerId)}
-                            
+                            className={`px-6 py-3 font-bold rounded text-white ${
+                              player.approvalStatus ? 'bg-red-600 hover:bg-red-800' : 'bg-gray-400 cursor-not-allowed'
+                            }`}
+                            onClick={() => unActive(player.playerId)}
+                            disabled={!player.approvalStatus}
                           >
-                            Delete
+                            UnActive
                           </button>
                           <button
-                            className={`px-6 py-3 font-bold rounded text-white ${
-                             'bg-green-600 hover:bg-green-800'
-                            }`}
+                            className={`px-6 py-3 font-bold rounded text-white bg-green-600 hover:bg-green-800`}
                             onClick={() => viewHandle(player.playerId)}
                           >
                             View
                           </button>
-                          {!player.approvalStatus && (
-                            <button
+                          <button
                             className={`px-6 py-3 font-bold rounded text-white ${
-                              player.approvalStatus ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-800'
+                              !player.approvalStatus ? 'bg-blue-600 hover:bg-blue-800' : 'bg-gray-400 cursor-not-allowed'
                             }`}
-                              onClick={() => activatePlayer(player.playerId)}
-                              disabled={player.approvalStatus}
-                            >
-                              Activate
-                            </button>
-                          )}
+                            onClick={() => activatePlayer(player.playerId)}
+                            disabled={player.approvalStatus}
+                          >
+                            Activate
+                          </button>
                         </td>
                       </tr>
                     ))

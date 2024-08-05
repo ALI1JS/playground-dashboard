@@ -16,7 +16,7 @@ const PlaygroundPage: React.FC = () => {
   useEffect(() => {
     fetchOwners();
   }, [fetchOwners]);
-
+  
   return (
     <div className="flex gap-5 w-[100vw] min-h-[100vh] relative">
       <div className="w-8 h-8 ml-5 absolute mt-10 cursor-pointer xl:hidden">

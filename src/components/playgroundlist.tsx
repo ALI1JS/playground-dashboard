@@ -58,7 +58,7 @@ const PlaygroundList: React.FC = () => {
 
   const handleActivateClick = async (stadiumId: number) => {
     try {
-      await axios.put(`${import.meta.env.VITE_BASE_URL}/api/Stadium/Active/${stadiumId}`);
+      await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Stadium/Active/${stadiumId}`);
       toast.success('Stadium activated successfully');
       setPlaygrounds(prevPlaygrounds =>
         prevPlaygrounds.map(playground =>
@@ -72,7 +72,7 @@ const PlaygroundList: React.FC = () => {
 
   const handleDeactivateClick = async (stadiumId: number) => {
     try {
-      await axios.put(`${import.meta.env.VITE_BASE_URL}/api/Stadium/UnActive/${stadiumId}`);
+      await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Stadium/UnActive/${stadiumId}`);
       toast.success('Stadium deactivated successfully');
       setPlaygrounds(prevPlaygrounds =>
         prevPlaygrounds.map(playground =>
@@ -84,9 +84,21 @@ const PlaygroundList: React.FC = () => {
     }
   };
 
+  const handleDeleteClick = async (stadiumId: number) => {
+    try {
+      await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/Stadium/Delete/${stadiumId}`);
+      toast.success('Stadium deleted successfully');
+      setPlaygrounds(prevPlaygrounds =>
+        prevPlaygrounds.filter(playground => playground.stadiumId !== stadiumId)
+      );
+    } catch (error: any) {
+      toast.error('Error deleting stadium:', error);
+    }
+  };
+
   return (
     <div className="p-4">
-      <div className="mb-4 flex space-x-4">
+      <div className="mb-4 flex space-x-4 flex-col md:flex-row">
         {/* Status Filter */}
         <select
           value={statusFilter}
@@ -108,7 +120,7 @@ const PlaygroundList: React.FC = () => {
         />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-6">
         {filteredPlaygrounds.map(playground => (
           <div key={playground.stadiumId} className="bg-white shadow-md rounded-lg p-6 flex flex-col gap-2">
             <h3 className="text-xl font-semibold mb-2">Owner: {playground.owner.userName}</h3>
@@ -119,7 +131,7 @@ const PlaygroundList: React.FC = () => {
             <Link className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 w-32" to={`/playground/${playground.stadiumId}`}>
               View Details
             </Link>
-            <div className="flex gap-4 mt-4">
+            <div className="flex flex-col md:flex-row gap-4 mt-4">
               <button
                 className={`text-white font-bold cursor-pointer px-3 py-2 rounded ${playground.approvalStatus === 1 ? 'bg-gray-400 cursor-not-allowed' : 'hover:bg-green-600 bg-green-500'}`}
                 onClick={() => handleActivateClick(playground.stadiumId)}
@@ -128,10 +140,17 @@ const PlaygroundList: React.FC = () => {
                 Activate
               </button>
               <button
-                className="hover:bg-red-600 bg-red-500 text-white font-bold cursor-pointer px-3 py-2 rounded"
+                className={`text-white font-bold cursor-pointer px-3 py-2 rounded ${playground.approvalStatus === 0 ? 'bg-gray-400 cursor-not-allowed' : 'hover:bg-red-600 bg-red-500'}`}
                 onClick={() => handleDeactivateClick(playground.stadiumId)}
+                disabled={playground.approvalStatus === 0}
               >
                 Un activate
+              </button>
+              <button
+                className="hover:bg-gray-600 bg-gray-500 text-white font-bold cursor-pointer px-3 py-2 rounded"
+                onClick={() => handleDeleteClick(playground.stadiumId)}
+              >
+                Delete
               </button>
             </div>
           </div>

@@ -6,7 +6,7 @@ import DisplayNumbers from "../components/numberCart/number-cart";
 import OwnerBasicInfo from "../components/owners/owner-basicinfo.comp";
 import PlayGroundView from "../components/owners/playgrounds-view.comp";
 import Feedback from "../components/owners/clients-feedback.comp";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { OwnersContext } from "../context/ownersContext";
@@ -23,6 +23,7 @@ interface PlayGround {
 }
 
 interface Owner {
+  id: string;
   userName: string;
   email: string;
   profilePictureUrl: string;
@@ -39,10 +40,12 @@ const OwnerDetailsPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [navbarIsHidden, setNavbarIsHidden] = useState(true);
   const { fetchOwners } = useContext(OwnersContext);
+  const navigate = useNavigate();
 
   const navbarDisplayHandle = (bool: boolean) => {
     setNavbarIsHidden(bool);
   };
+
 
   useEffect(() => {
     fetchOwners();
@@ -77,6 +80,21 @@ const OwnerDetailsPage: React.FC = () => {
     fetchOwnerDetails();
   }, [id]);
 
+ const deleteHandle = async (id: string) => {
+    try {
+      const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/Owner/Delete/${id}`);
+
+      if (res.status === 200) {
+        toast.success('The Owner deleted successfully');
+        navigate(-1)
+      } else {
+        throw new Error("The Owner isn't deleted, try again");
+      }
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -105,6 +123,9 @@ const OwnerDetailsPage: React.FC = () => {
           />
           <PlayGroundView playgrounds={playgrounds} />
           <Feedback reviews={owner.reviews} rate={owner.rate} />
+          <div>
+            <button className="px-8 py-3 rounded bg-red-500 hover:bg-red-600 font-bold" onClick={()=>deleteHandle(owner.id)}>Delete</button>
+          </div>
         </div>
       </div>
     </div>
