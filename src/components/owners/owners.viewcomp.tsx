@@ -15,6 +15,12 @@ const OwnerView: React.FC = () => {
     return <div>Loading...</div>; // You can adjust this based on your context
   }
 
+  const viewProofIdentifier = (url: string) => {
+    const baseUrl = import.meta.env.VITE_BASE_URL; // Your server base URL
+    const fullUrl = url.startsWith('http') ? url : `${baseUrl}/${url}`;
+    window.open(fullUrl, '_blank');
+  };
+
   return (
     <div className="container mx-auto bg-white rounded py-3">
       <div className="overflow-x-auto">
@@ -35,6 +41,7 @@ const OwnerView: React.FC = () => {
                 label2={owner.email}
                 label3={owner.proofOfIdentityUrl}
                 view={viewHandle}
+                viewProofIdentifier={owner.proofOfIdentityUrl ? () => viewProofIdentifier(owner.proofOfIdentityUrl!) : undefined}
               />
             ))}
           </tbody>
