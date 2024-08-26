@@ -27,7 +27,7 @@ const PlayersDisplay: React.FC = () => {
 
       if (res.status === 200) {
         toast.success('The Player Deleted Successfully');
-        fetchPlayers();
+        fetchPlayers(); // Refresh the player list after unactivating a player
       } else {
         throw new Error("The Player isn't deleted, try again");
       }
@@ -52,7 +52,7 @@ const PlayersDisplay: React.FC = () => {
 
       if (res.status === 200) {
         toast.success('The Player Activated Successfully');
-        fetchPlayers();
+        fetchPlayers(); // Refresh the player list after activating a player
       } else {
         throw new Error("The Player isn't activated, try again");
       }
@@ -62,8 +62,8 @@ const PlayersDisplay: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchPlayers();
-  }, [fetchPlayers]);
+    fetchPlayers(); // Fetch players when the component mounts
+  }, []);
 
   const handleLoadMore = () => {
     const morePlayersLoaded = loadMorePlayers();

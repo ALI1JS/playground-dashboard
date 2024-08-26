@@ -124,7 +124,7 @@ const OwnerDetailsPage: React.FC = () => {
           <PlayGroundView playgrounds={playgrounds} />
           <Feedback reviews={owner.reviews} rate={owner.rate} />
           <div>
-            <button className="px-8 py-3 rounded bg-red-500 hover:bg-red-600 font-bold" onClick={()=>deleteHandle(owner.id)}>Delete</button>
+            <button className="px-8 py-3 text-white rounded bg-red-500 hover:bg-red-600 font-bold" onClick={()=>deleteHandle(owner.id)}>Delete</button>
           </div>
         </div>
       </div>

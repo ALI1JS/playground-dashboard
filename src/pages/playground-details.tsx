@@ -60,7 +60,7 @@ const PlaygroundDetails: React.FC = () => {
 
     const handleActivateClick = async () => {
         try {
-            await axios.put(`${import.meta.env.VITE_BASE_URL}/api/Stadium/Active/${stadiumId}`);
+            await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Stadium/Active/${stadiumId}`);
             toast.success('Stadium activated successfully');
             setStadium((prevStadium) => prevStadium ? { ...prevStadium, approvalStatus: 1 } : prevStadium);
         } catch (error: any) {

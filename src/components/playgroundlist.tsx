@@ -23,10 +23,9 @@ const PlaygroundList: React.FC = () => {
   useEffect(() => {
     const fetchPlaygrounds = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/Stadium`);
-        const data = await response.json();
-        setPlaygrounds(data);
-        setFilteredPlaygrounds(data);
+        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/Stadium`);
+        setPlaygrounds(response.data);
+        setFilteredPlaygrounds(response.data);
       } catch (error) {
         console.error("Error fetching playgrounds:", error);
       }
