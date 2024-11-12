@@ -1,13 +1,13 @@
-import React, { useState, useContext, useEffect } from 'react';
-import Navbar from '../components/navbar/navbar.com';
-import DisplayNumbers from '../components/numberCart/number-cart';
-import TableHead from '../components/table/head.comp';
-import OwnerRow from '../components/table/row.comp';
-import Nav from '../components/nav/nav.comp';
-import humbrgerBar from '../assets/menu-icon.png';
-import { OwnersContext } from '../context/ownersContext';
-import axios from 'axios';
-import toast from 'react-hot-toast';
+import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import humbrgerBar from "../assets/menu-icon.png";
+import Nav from "../components/nav/nav.comp";
+import Navbar from "../components/navbar/navbar.com";
+import DisplayNumbers from "../components/numberCart/number-cart";
+import TableHead from "../components/table/head.comp";
+import OwnerRow from "../components/table/row.comp";
+import { OwnersContext } from "../context/ownersContext";
 
 const OwnersDisplay: React.FC = () => {
   const [navbarIsHidden, setNavbarIsHidden] = useState(true);
@@ -19,7 +19,7 @@ const OwnersDisplay: React.FC = () => {
   };
 
   const viewHandle = () => {
-    console.log('View owner');
+    console.log("View owner");
   };
 
   const UnActive = async (id: string) => {
@@ -27,8 +27,8 @@ const OwnersDisplay: React.FC = () => {
       const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Owner/UnActive/${id}`);
 
       if (res.status === 200) {
-        toast.success('The Owner deactivated successfully');
-        setOwners(owners.filter(owner => owner.ownerId !== id));
+        toast.success("The Owner deactivated successfully");
+        setOwners(owners.filter((owner) => owner.ownerId !== id));
       } else {
         throw new Error("The Owner isn't deactivated, try again");
       }
@@ -39,13 +39,13 @@ const OwnersDisplay: React.FC = () => {
 
   const viewProofIdentifier = (url: string) => {
     const baseUrl = import.meta.env.VITE_BASE_URL; // Your server base URL
-    const fullUrl = url.startsWith('http') ? url : `${baseUrl}/${url}`;
-    window.open(fullUrl, '_blank');
+    const fullUrl = url.startsWith("http") ? url : `${baseUrl}/${url}`;
+    window.open(fullUrl, "_blank");
   };
 
   useEffect(() => {
     fetchOwners();
-  }, [fetchOwners]);
+  }, []);
 
   useEffect(() => {
     setOwners(displayedOwners);
@@ -54,22 +54,32 @@ const OwnersDisplay: React.FC = () => {
   const handleLoadMore = () => {
     const moreOwnersLoaded = loadMoreOwners();
     if (!moreOwnersLoaded) {
-      toast('No more owners to load', { icon: '🚫' });
+      toast("No more owners to load", { icon: "🚫" });
     }
   };
 
   return (
     <div className="flex gap-5 w-full min-h-screen relative">
       <div className="w-8 h-8 ml-5 absolute mt-10 cursor-pointer xl:hidden">
-        <img onClick={() => navbarDisplayHandle()} src={humbrgerBar} alt="menu-icon" />
+        <img
+          onClick={() => navbarDisplayHandle()}
+          src={humbrgerBar}
+          alt="menu-icon"
+        />
       </div>
-      <Navbar closeNavbar={navbarDisplayHandle} isHidden={navbarIsHidden} />
+      <Navbar
+        closeNavbar={navbarDisplayHandle}
+        isHidden={navbarIsHidden}
+      />
 
       <div className="w-full xl:w-[72%] 2xl:w-[78%] min-h-full flex flex-col xl:absolute xl:right-10">
         <Nav />
         <div className="flex flex-col gap-20 w-full p-10 bg-slate-100 absolute top-[150px]">
           <div className="w-full flex gap-5 mt-20">
-            <DisplayNumbers title="Owners" number={totalOwners} />
+            <DisplayNumbers
+              title="Owners"
+              number={totalOwners}
+            />
           </div>
 
           <div className="container mx-auto bg-white rounded py-3">
@@ -92,13 +102,20 @@ const OwnersDisplay: React.FC = () => {
                         label2={owner.email}
                         label3={owner.proofOfIdentityUrl}
                         unActivate={() => UnActive(owner.ownerId)}
-                        viewProofIdentifier={owner.proofOfIdentityUrl ? () => viewProofIdentifier(owner.proofOfIdentityUrl!) : undefined}
+                        viewProofIdentifier={
+                          owner.proofOfIdentityUrl
+                            ? () => viewProofIdentifier(owner.proofOfIdentityUrl!)
+                            : undefined
+                        }
                         view={viewHandle}
                       />
                     ))
                   ) : (
                     <tr>
-                      <td className="font-bold text-xl text-center" colSpan={4}>
+                      <td
+                        className="font-bold text-xl text-center"
+                        colSpan={4}
+                      >
                         Loading...
                       </td>
                     </tr>
