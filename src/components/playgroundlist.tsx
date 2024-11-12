@@ -19,6 +19,8 @@ const PlaygroundList: React.FC = () => {
   const [filteredPlaygrounds, setFilteredPlaygrounds] = useState<Playground[]>([]);
   const [statusFilter, setStatusFilter] = useState<string>("");
   const [cityFilter, setCityFilter] = useState<string>("");
+  const [selectedPlayground, setSelectedPlayground] = useState<Playground | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchPlaygrounds = async () => {
@@ -26,8 +28,8 @@ const PlaygroundList: React.FC = () => {
         const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/Stadium`);
         setPlaygrounds(response.data);
         setFilteredPlaygrounds(response.data);
-      } catch (error) {
-        console.error("Error fetching playgrounds:", error);
+      } catch (error: any) {
+        toast.error("Error fetching playgrounds:", error);
       }
     };
 
@@ -57,7 +59,7 @@ const PlaygroundList: React.FC = () => {
 
   const handleActivateClick = async (stadiumId: number) => {
     try {
-      await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Stadium/Active/${stadiumId}`);
+      await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Admin/ActiveStadium/${stadiumId}`);
       toast.success('Stadium activated successfully');
       setPlaygrounds(prevPlaygrounds =>
         prevPlaygrounds.map(playground =>
@@ -71,7 +73,7 @@ const PlaygroundList: React.FC = () => {
 
   const handleDeactivateClick = async (stadiumId: number) => {
     try {
-      await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Stadium/UnActive/${stadiumId}`);
+      await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Admin/UnActiveStadium/${stadiumId}`);
       toast.success('Stadium deactivated successfully');
       setPlaygrounds(prevPlaygrounds =>
         prevPlaygrounds.map(playground =>
@@ -85,7 +87,7 @@ const PlaygroundList: React.FC = () => {
 
   const handleDeleteClick = async (stadiumId: number) => {
     try {
-      await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/Stadium/Delete/${stadiumId}`);
+      await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/Stadium/${stadiumId}`);
       toast.success('Stadium deleted successfully');
       setPlaygrounds(prevPlaygrounds =>
         prevPlaygrounds.filter(playground => playground.stadiumId !== stadiumId)
@@ -93,6 +95,16 @@ const PlaygroundList: React.FC = () => {
     } catch (error: any) {
       toast.error('Error deleting stadium:', error);
     }
+  };
+
+  const handleOpenModal = (playground: Playground) => {
+    setSelectedPlayground(playground);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedPlayground(null);
   };
 
   return (
@@ -124,7 +136,16 @@ const PlaygroundList: React.FC = () => {
           <div key={playground.stadiumId} className="bg-white shadow-md rounded-lg p-6 flex flex-col gap-2">
             <h3 className="text-xl font-semibold mb-2">Owner: {playground.owner.userName}</h3>
             <h3 className="text-xl font-semibold mb-2">Playground Name: {playground.name}</h3>
-            <p className="text-gray-600 mb-4"> Description: {playground.description}</p>
+            {/* Display truncated description */}
+            <p className="text-gray-600 mb-4">
+              Description: {playground.description.length > 100 ? `${playground.description.substring(0, 100)}...` : playground.description}
+            </p>
+            <button
+              className="text-blue-500 hover:underline mb-4"
+              onClick={() => handleOpenModal(playground)}
+            >
+              More
+            </button>
             <p className="text-sm text-gray-500 mb-4">Status: {playground.approvalStatus === 1 ? 'Active' : 'Inactive'}</p>
             <p className="text-sm text-gray-500">Address: {playground.address}</p>
             <Link className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 w-32" to={`/playground/${playground.stadiumId}`}>
@@ -143,7 +164,7 @@ const PlaygroundList: React.FC = () => {
                 onClick={() => handleDeactivateClick(playground.stadiumId)}
                 disabled={playground.approvalStatus === 0}
               >
-                Un activate
+                Unactivate
               </button>
               <button
                 className="hover:bg-gray-600 bg-gray-500 text-white font-bold cursor-pointer px-3 py-2 rounded"
@@ -155,6 +176,25 @@ const PlaygroundList: React.FC = () => {
           </div>
         ))}
       </div>
+
+      {/* Modal for displaying full description */}
+      {isModalOpen && selectedPlayground && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 w-full">
+          <div className="bg-white rounded-lg p-4 max-w-2xl mx-auto h-auto" style={{ maxHeight: '80vh', overflowY: 'auto' }}>
+            <h2 className="text-2xl font-semibold mb-4">{selectedPlayground.name}</h2>
+            <h3 className="text-xl mb-2">Owner: {selectedPlayground.owner.userName}</h3>
+            <p className="text-gray-600 mb-4">Full Description:</p>
+            <p>{selectedPlayground.description}</p>
+            <button
+              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+              onClick={handleCloseModal}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

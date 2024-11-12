@@ -56,7 +56,7 @@ const OwnerDetailsPage: React.FC = () => {
       try {
         const [ownerResponse, playgroundsResponse] = await Promise.all([
           axios.get(`${import.meta.env.VITE_BASE_URL}/api/Owner/${id}`),
-          axios.get(`${import.meta.env.VITE_BASE_URL}/api/Owner/GetStadiums/${id}`)
+          axios.get(`${import.meta.env.VITE_BASE_URL}/api/Owner/Stadiums/${id}`)
         ]);
 
         if (ownerResponse.status === 200) {

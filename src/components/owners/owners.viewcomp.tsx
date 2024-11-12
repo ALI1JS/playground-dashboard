@@ -18,6 +18,7 @@ const OwnerView: React.FC = () => {
   const viewProofIdentifier = (url: string) => {
     const baseUrl = import.meta.env.VITE_BASE_URL; // Your server base URL
     const fullUrl = url.startsWith('http') ? url : `${baseUrl}/${url}`;
+    console.log(baseUrl, fullUrl, url);
     window.open(fullUrl, '_blank');
   };
 

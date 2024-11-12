@@ -58,6 +58,29 @@ const OwnersDisplay: React.FC = () => {
     }
   };
 
+  const handleUploadContract = async (file: File, ownerId?: number) => {
+    console.log(ownerId);
+    const formData = new FormData();
+    formData.append('contract', file); // Adjust this key if your API expects a different name
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Owner/UploadContract`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // Set the content type for file upload
+        },
+      });
+  
+      console.log(response.data);
+      if (response.status === 200) {
+        toast.success('Contract uploaded successfully!');
+      } else {
+        toast.error('Failed to upload contract.');
+      }
+    } catch (error: any) {
+      toast.error(error.message || 'An error occurred while uploading the contract.');
+    }
+  };
+
+  
   return (
     <div className="flex gap-5 w-full min-h-screen relative">
       <div className="w-8 h-8 ml-5 absolute mt-10 cursor-pointer xl:hidden">
@@ -94,6 +117,7 @@ const OwnersDisplay: React.FC = () => {
                         unActivate={() => UnActive(owner.ownerId)}
                         viewProofIdentifier={owner.proofOfIdentityUrl ? () => viewProofIdentifier(owner.proofOfIdentityUrl!) : undefined}
                         view={viewHandle}
+                        onUploadContract={handleUploadContract} 
                       />
                     ))
                   ) : (
