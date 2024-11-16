@@ -51,7 +51,7 @@ const BannerForm = () => {
         };
 
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Banner/Add`, bannerData, {
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Banner`, bannerData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },

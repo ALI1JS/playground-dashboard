@@ -14,13 +14,15 @@ const AdminSignup: React.FC = () => {
     username: '',
     email: '',
     password: '',
-    role: 2147483647, // Set default role
+    role: 1, // Default role set to 'Super Admin'
   });
 
   const [error, setError] = useState<string>('');
   const [successMessage, setSuccessMessage] = useState<string>('');
+  const [passwordVisible, setPasswordVisible] = useState<boolean>(false); // State for toggling password visibility
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Handle input changes
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -28,6 +30,12 @@ const AdminSignup: React.FC = () => {
     }));
   };
 
+  // Handle password visibility toggle
+  const togglePasswordVisibility = () => {
+    setPasswordVisible((prevState) => !prevState);
+  };
+
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
@@ -39,10 +47,9 @@ const AdminSignup: React.FC = () => {
         formData
       );
 
-      if (response.data.message)
-      {
+      if (response.data.message) {
         setSuccessMessage(response.data.message);
-        setFormData({ username: '', email: '', password: '', role: 2147483647 });
+        setFormData({ username: '', email: '', password: '', role: 1 }); // Reset form after success
       }
     } catch (error: any) {
       if (error.response) {
@@ -83,25 +90,38 @@ const AdminSignup: React.FC = () => {
         </div>
         <div>
           <label className="block text-sm font-medium">Password</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            className="mt-1 py-1 block w-full border border-gray-400 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-          />
+          <div className="relative">
+            <input
+              type={passwordVisible ? 'text' : 'password'}
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              className="mt-1 py-1 block w-full border border-gray-400 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+            />
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              className="absolute top-1/2 right-3 transform -translate-y-1/2 text-sm text-gray-600"
+            >
+              {passwordVisible ? 'Hide' : 'Show'}
+            </button>
+          </div>
         </div>
         <div>
           <label className="block text-sm font-medium">Role</label>
-          <input
-            type="number"
+          <select
             name="role"
             value={formData.role}
             onChange={handleChange}
             required
             className="mt-1 py-1 block w-full border border-gray-400 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-          />
+          >
+            <option value={1}>Super Admin</option>
+            <option value={2}>Admin1</option>
+            <option value={3}>Admin2</option>
+            <option value={4}>Support</option>
+          </select>
         </div>
         <div className="flex justify-end">
           <button

@@ -24,6 +24,7 @@ const CatogeryForm = () => {
 
         const formData = new FormData();
         formData.append('CategoryImage', image);
+        console.log("upload image");
 
         try {
             const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Category/UploadCategoryImage`, formData, {
@@ -31,6 +32,8 @@ const CatogeryForm = () => {
                     'Content-Type': 'multipart/form-data',
                 },
             });
+
+            console.log(response.data);
 
             if (response.status === 200) {
                 toast.success('Image uploaded successfully!');
@@ -51,8 +54,7 @@ const CatogeryForm = () => {
             return;
         }
 
-        if(!categoryImageUrl)
-        {
+        if (!categoryImageUrl) {
             toast.error("You must upload image")
         }
 
@@ -75,7 +77,8 @@ const CatogeryForm = () => {
                 setImage(null);
                 setImageUrl('');
                 setNameAr('');
-                setNameEn('');            } else {
+                setNameEn('');
+            } else {
                 toast.error('Failed to add category: ' + response.data.message);
             }
         } catch (error: any) {

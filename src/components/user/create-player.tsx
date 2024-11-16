@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
 
-// Define the interface for the form data
 interface PlayerSignupData {
   username: string;
   email: string;
@@ -13,182 +13,229 @@ interface PlayerSignupData {
 
 const PlayerSignup: React.FC = () => {
   const [formData, setFormData] = useState<PlayerSignupData>({
-    username: '',
-    email: '',
-    password: '',
-    birthDate: '',
+    username: "",
+    email: "",
+    password: "",
+    birthDate: "",
     gender: 0, // Default is female
-    profilePictureUrl: '',
+    profilePictureUrl: "",
   });
 
-  const [error, setError] = useState<string>('');
-  const [successMessage, setSuccessMessage] = useState<string>('');
-  const [file, setFile] = useState<File | null>(null); // State for the selected file
+  const [error, setError] = useState<string>("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>("");
 
-  // Handle input changes
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-
-    if (name === 'gender') {
-      // Map the gender value to 0 (female) or 1 (male)
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: value === 'female' ? 0 : 1,
-      }));
-    } else {
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
-    }
-  };
-
-  // Handle file change for the profile picture
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setFile(e.target.files[0]);
+      const selectedFile = e.target.files[0];
+      setImageFile(selectedFile);
+
+      // Create a preview URL
+      const preview = URL.createObjectURL(selectedFile);
+      setImagePreview(preview);
     }
   };
 
-  // Function to upload the profile picture
-  const uploadProfilePicture = async (): Promise<string> => {
-    if (!file) {
-      throw new Error('No file selected.');
+  const uploadImage = async () => {
+    if (!imageFile) {
+      toast.error("Please select an image to upload.");
+      return;
     }
 
     const formData = new FormData();
-    formData.append('file', file);
-
-    const response = await axios.post(
-      'https://hawihub1-001-site1.gtempurl.com/api/Player/UploadProfilePicture',
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
-    );
-
-    return response.data.profilePictureUrl; // Adjust according to your API response
-  };
-
-  // Handle form submission
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError('');
-    setSuccessMessage('');
+    formData.append("ProfilePicture", imageFile);
 
     try {
-      const uploadedProfilePictureUrl = await uploadProfilePicture();
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/api/Player/UploadProfilePicture`,
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+      const uploadedUrl = response.data.imageUrl;
+      setFormData((prevData) => ({ ...prevData, profilePictureUrl: uploadedUrl }));
+      toast.success(response.data.message);
+    } catch (err: any) {
+      const message = err.response?.data?.message || "Image upload failed.";
+      toast.error(message);
+    }
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: name === "gender" ? (value === "female" ? 0 : 1) : value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+
+    try {
+      if (!formData.profilePictureUrl) {
+        toast.error("Please upload a profile picture first.");
+        return;
+      }
+
       const response = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/Player/Signup`,
-        { ...formData, profilePictureUrl: uploadedProfilePictureUrl }
+        formData
       );
 
-      console.log(response.data);
       if (response.data.message) {
-        setSuccessMessage(response.data.message);
+        toast.success(response.data.message);
         setFormData({
-          username: '',
-          email: '',
-          password: '',
-          birthDate: '',
+          username: "",
+          email: "",
+          password: "",
+          birthDate: "",
           gender: 0,
-          profilePictureUrl: '',
+          profilePictureUrl: "",
         });
-        setFile(null); // Reset the file input
+        setImageFile(null);
+        setImagePreview("");
       }
-    } catch (error: any) {
-      console.log(error);
-      if (error.response) {
-        setError(error.response.data || 'An error occurred. Please try again.');
-      } else {
-        setError('Network error. Please try again later.');
-      }
+    } catch (err: any) {
+      const message = err.response?.data?.message || "An error occurred.";
+      setError(message);
+      toast.error(message);
     }
   };
 
   return (
-    <div className="md:w-[60vw] mt-10 p-6 border border-gray-300 rounded-lg shadow-lg bg-white">
+    <div className="md:w-[40vw] mt-10 p-6 border border-gray-300 rounded-lg shadow-lg bg-white">
       <h1 className="text-2xl font-bold mb-4 text-center">Create Player Account</h1>
-      {successMessage && <p className="text-green-500">{successMessage}</p>}
       {error && <p className="text-red-500">{error}</p>}
+
+      {/* Image Upload Section */}
+      <div className="mb-6 text-center">
+        <label className="block text-sm font-medium mb-2">Profile Picture</label>
+        <div className="flex flex-col items-center">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="hidden"
+            id="upload-image"
+          />
+          <label htmlFor="upload-image" className="cursor-pointer">
+            {imagePreview ? (
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="w-32 h-32 object-cover rounded-full border-2 border-gray-300"
+              />
+            ) : (
+              <div className="w-32 h-32 flex items-center justify-center rounded-full border-2 border-gray-300 bg-gray-100 text-gray-500">
+                Upload Image
+              </div>
+            )}
+          </label>
+          {imageFile && (
+            <button
+              onClick={uploadImage}
+              className="mt-3 bg-blue-500 text-white px-4 py-2 rounded-md"
+            >
+              Upload
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Form Section */}
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Username */}
         <div>
-          <label className="block text-sm font-medium">Username</label>
+          <label htmlFor="username" className="block text-sm font-medium">
+            Username
+          </label>
           <input
             type="text"
+            id="username"
             name="username"
             value={formData.username}
             onChange={handleChange}
             required
-            className="mt-1 py-1 block w-full border border-gray-400 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+            className="mt-1 py-1 block w-full border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 outline-none"
           />
         </div>
+
+        {/* Email */}
         <div>
-          <label className="block text-sm font-medium">Email</label>
+          <label htmlFor="email" className="block text-sm font-medium">
+            Email
+          </label>
           <input
             type="email"
+            id="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
             required
-            className="mt-1 py-1 block w-full border border-gray-400 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+            className="mt-1 py-1 block w-full border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 outline-none"
           />
         </div>
+
+        {/* Password */}
         <div>
-          <label className="block text-sm font-medium">Password</label>
+          <label htmlFor="password" className="block text-sm font-medium">
+            Password
+          </label>
           <input
             type="password"
+            id="password"
             name="password"
             value={formData.password}
             onChange={handleChange}
             required
-            className="mt-1 py-1 block w-full border border-gray-400 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+            className="mt-1 py-1 block w-full border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 outline-none"
           />
         </div>
+
+        {/* Birth Date */}
         <div>
-          <label className="block text-sm font-medium">Birth Date</label>
+          <label htmlFor="birthDate" className="block text-sm font-medium">
+            Birth Date
+          </label>
           <input
             type="date"
+            id="birthDate"
             name="birthDate"
             value={formData.birthDate}
             onChange={handleChange}
             required
-            className="mt-1 py-1 block w-full border border-gray-400 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+            className="mt-1 py-1 block w-full border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 outline-none"
           />
         </div>
+
+        {/* Gender */}
         <div>
-          <label className="block text-sm font-medium">Gender</label>
+          <label htmlFor="gender" className="block text-sm font-medium">
+            Gender
+          </label>
           <select
+            id="gender"
             name="gender"
-            value={formData.gender === 0 ? 'female' : 'male'}
+            value={formData.gender === 0 ? "female" : "male"}
             onChange={handleChange}
             required
-            className="mt-1 py-1 block w-full border border-gray-400 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+            className="mt-1 py-1 block w-full border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 outline-none"
           >
             <option value="female">Female</option>
             <option value="male">Male</option>
           </select>
         </div>
-        <div>
-          <label className="block text-sm font-medium">Profile Picture</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            required
-            className="mt-1 py-1 block w-full border border-gray-400 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-          />
-        </div>
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            className="bg-blue-600 text-white py-2 px-6 rounded-md hover:bg-blue-700 transition duration-200"
-          >
-            Create Player
-          </button>
-        </div>
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className="bg-green-500 text-white px-6 py-2 rounded-md w-full"
+        >
+          Create Player
+        </button>
       </form>
     </div>
   );

@@ -24,7 +24,7 @@ const OwnersDisplay: React.FC = () => {
 
   const UnActive = async (id: string) => {
     try {
-      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Owner/UnActive/${id}`);
+      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Admin/UnActiveOwner/${id}`);
 
       if (res.status === 200) {
         toast.success('The Owner deactivated successfully');
@@ -69,13 +69,13 @@ const OwnersDisplay: React.FC = () => {
         },
       });
   
-      console.log(response.data);
       if (response.status === 200) {
         toast.success('Contract uploaded successfully!');
       } else {
         toast.error('Failed to upload contract.');
       }
     } catch (error: any) {
+      console.log(error);
       toast.error(error.message || 'An error occurred while uploading the contract.');
     }
   };

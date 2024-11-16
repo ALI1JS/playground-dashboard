@@ -23,7 +23,7 @@ const PlayersDisplay: React.FC = () => {
 
   const unActive = async (id: string) => {
     try {
-      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Player/UnActive/${id}`);
+      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Admin/UnActivePlayer/${id}`);
 
       if (res.status === 200) {
         toast.success('The Player Deleted Successfully');
@@ -48,7 +48,7 @@ const PlayersDisplay: React.FC = () => {
 
   const activatePlayer = async (id: string) => {
     try {
-      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Player/Active/${id}`);
+      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Admin/ActivePlayer/${id}`);
 
       if (res.status === 200) {
         toast.success('The Player Activated Successfully');
