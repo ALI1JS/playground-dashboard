@@ -29,8 +29,9 @@ const Login: React.FC = () => {
       }
     
       try {
+  
         const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Admin/Login`, adminLoginData);
-       
+        
         if (response.status === 200) {
           setAdmin({ username: response.data.userName, wallet: response.data.wallet });
           sessionStorage.setItem('adminEmail', response.data.email)
@@ -39,7 +40,7 @@ const Login: React.FC = () => {
         }
       } catch (error) {
         if (axios.isAxiosError(error)) {
-         
+        
           if (error.response) {
             if (error.response.status === 404) {
               toast.error('Invalid email or password.');
