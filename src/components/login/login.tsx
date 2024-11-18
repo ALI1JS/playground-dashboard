@@ -39,7 +39,11 @@ const Login: React.FC = () => {
       );
 
       if (response.status === 200) {
-        setAdmin({ username: response.data.userName, wallet: response.data.wallet });
+        setAdmin({
+          username: response.data.userName,
+          wallet: response.data.wallet,
+          id: response.data.id,
+        });
         sessionStorage.setItem("adminEmail", response.data.email);
         toast.success("Login Successfully");
         navigate("/dashboard");

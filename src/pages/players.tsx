@@ -104,6 +104,9 @@ const PlayersDisplay: React.FC = () => {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Actions
                     </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      View Reservations
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -130,9 +133,8 @@ const PlayersDisplay: React.FC = () => {
                         </td>
                         <td className="flex gap-3 px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           <button
-                            className={`px-6 py-3 font-bold rounded text-white ${
-                              player.approvalStatus ? 'bg-red-600 hover:bg-red-800' : 'bg-gray-400 cursor-not-allowed'
-                            }`}
+                            className={`px-6 py-3 font-bold rounded text-white ${player.approvalStatus ? 'bg-red-600 hover:bg-red-800' : 'bg-gray-400 cursor-not-allowed'
+                              }`}
                             onClick={() => unActive(player.playerId)}
                             disabled={!player.approvalStatus}
                           >
@@ -145,20 +147,27 @@ const PlayersDisplay: React.FC = () => {
                             View
                           </button>
                           <button
-                            className={`px-6 py-3 font-bold rounded text-white ${
-                              !player.approvalStatus ? 'bg-blue-600 hover:bg-blue-800' : 'bg-gray-400 cursor-not-allowed'
-                            }`}
+                            className={`px-6 py-3 font-bold rounded text-white ${!player.approvalStatus ? 'bg-blue-600 hover:bg-blue-800' : 'bg-gray-400 cursor-not-allowed'
+                              }`}
                             onClick={() => activatePlayer(player.playerId)}
                             disabled={player.approvalStatus}
                           >
                             Activate
                           </button>
                         </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-right">
+                          <button
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            onClick={() => navigate(`/player/reservation/${player.playerId}`)}
+                          >
+                            View Reservations
+                          </button>
+                        </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td className='font-bold text-xl text-center' colSpan={4}>Loading...</td>
+                      <td className='font-bold text-xl text-center' colSpan={5}>Loading...</td>
                     </tr>
                   )}
                 </tbody>

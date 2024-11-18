@@ -1,9 +1,10 @@
-import React, { createContext, useState, ReactNode, useContext } from 'react';
+import React, { createContext, ReactNode, useContext, useState } from "react";
 
 // Define the Admin interface
 interface Admin {
   username: string;
   wallet: any;
+  id?: any;
 }
 
 // Define the context type
@@ -32,22 +33,18 @@ const AdminProvider = ({ children }: AdminProviderProps) => {
 
   const setAdmin = (admin: Admin) => {
     setAdminState(admin);
-    localStorage.setItem('admin', JSON.stringify(admin)); // Store admin details in localStorage
+    localStorage.setItem("admin", JSON.stringify(admin)); // Store admin details in localStorage
   };
 
   // Load admin from localStorage when the component mounts
   React.useEffect(() => {
-    const storedAdmin = localStorage.getItem('admin');
+    const storedAdmin = localStorage.getItem("admin");
     if (storedAdmin) {
       setAdminState(JSON.parse(storedAdmin));
     }
   }, []);
 
-  return (
-    <AdminContext.Provider value={{ admin, setAdmin }}>
-      {children}
-    </AdminContext.Provider>
-  );
+  return <AdminContext.Provider value={{ admin, setAdmin }}>{children}</AdminContext.Provider>;
 };
 
 // Custom hook for easier context usage

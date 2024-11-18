@@ -69,6 +69,7 @@ const OwnerDetailsPage: React.FC = () => {
         } else {
           toast.error("Failed to load the playgrounds");
         }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         toast.error("Error fetching owner details: " + error.message);
       } finally {
@@ -89,6 +90,7 @@ const OwnerDetailsPage: React.FC = () => {
       } else {
         throw new Error("The Owner isn't deleted, try again");
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error.message);
     }

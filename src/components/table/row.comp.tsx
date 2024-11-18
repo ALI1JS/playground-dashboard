@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
 
 interface OwnerProps {
@@ -15,6 +15,7 @@ interface OwnerProps {
   delete?: () => void;
   view?: () => void;
   viewProofIdentifier?: (url: string) => void;
+  onUploadContract?: (file: File) => void; // New optional prop for file upload
 }
 
 const OwnerRow: React.FC<OwnerProps> = ({
@@ -31,6 +32,7 @@ const OwnerRow: React.FC<OwnerProps> = ({
   delete: deleteOwner,
   view,
   viewProofIdentifier,
+  onUploadContract, // Destructure the new prop
 }) => {
   const handleViewProofClick = () => {
     if (viewProofIdentifier && label3) {
@@ -44,6 +46,14 @@ const OwnerRow: React.FC<OwnerProps> = ({
     }
   };
 
+  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file && onUploadContract) {
+      // Call the upload function and handle the response if necessary
+      await onUploadContract(file); // Pass the file and id to the upload function
+    }
+  };
+
   return (
     <tr>
       <td className="px-4 py-2">{label1}</td>
@@ -54,9 +64,7 @@ const OwnerRow: React.FC<OwnerProps> = ({
             View Proof
           </a>
         )}
-        {label7 && !label3 && (
-          <p>{label7}</p>
-        )}
+        {label7 && !label3 && <p>{label7}</p>}
       </td>
       <td className="px-4 py-2">{label4}</td>
       <td className="px-4 py-2">{label5}</td>
@@ -96,6 +104,28 @@ const OwnerRow: React.FC<OwnerProps> = ({
             </button>
           </Link>
         )}
+        {onUploadContract && ( // Render the upload button if the prop is provided
+          <div className="flex items-center space-x-2"> {/* Flex container with horizontal alignment */}
+            <input
+              type="file"
+              accept="application/pdf"
+              onChange={handleFileChange}
+              className="hidden" // Hide the default file input
+              id={`upload-contract-${id}`} // Unique ID for the input
+            />
+            <label
+              htmlFor={`upload-contract-${id}`}
+              className="hover:bg-blue-600 bg-blue-500 text-white font-bold cursor-pointer px-4 py-2 rounded w-32" // Adjust padding as needed
+            >
+              Contract
+            </label>
+          </div>
+        )}
+        <Link to={`/chat/${id}`}>
+          <button className="hover:bg-yellow-600 bg-yellow-500 text-white font-bold cursor-pointer px-3 py-2 rounded">
+            Chat
+          </button>
+        </Link>
       </td>
     </tr>
   );

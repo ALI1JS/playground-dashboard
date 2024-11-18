@@ -11,6 +11,13 @@ import ViewCatogeryPage from './pages/catogeries';
 import AddBannerPage from './pages/add-banner-page';
 import ViewBannerPage from './pages/banners';
 import PlaygroundPage from './pages/playgrounds.pages';
+import CreateAdmin from './pages/create-admin';
+import ViewAdmins from './pages/view-admins';
+import CreateOwner from './pages/create-owner';
+import CreatePlayer from './pages/create-player';
+import PLayerReservtion from './pages/player-reservtion';
+import Chat from './pages/chat';
+import Report from './components/reports/year-report';
 
 
 export const routers = [
@@ -65,6 +72,34 @@ export const routers = [
   {
     path: "/playgrounds",
     element: <PlaygroundPage/>
+  },
+  {
+    path: "/admin/create",
+    element: <CreateAdmin/>
+  },
+  {
+    path: "/admin/view",
+    element: <ViewAdmins/>
+  },
+  {
+    path: "/user/owner/create",
+    element: <CreateOwner/>
+  },
+  {
+    path: "/user/player/create",
+    element: <CreatePlayer/>
+  },
+  {
+    path: "/player/reservation/:id",
+    element: <PLayerReservtion/>
+  },
+  {
+    path: "/report",
+    element: <Report/>
+  },
+  {
+    path: "/chat",
+    element: <Chat/>
   },
   {
     path: "*",
