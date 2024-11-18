@@ -26,7 +26,7 @@ const PlaygroundDetails: React.FC = () => {
     useEffect(() => {
         const fetchStadiumData = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/Stadium/GetByStadiumId/${stadiumId}`);
+                const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/Stadium/${stadiumId}`);
                 setStadium(response.data);
             } catch (error: any) {
                 toast.error('Error fetching stadium data:', error);
@@ -35,7 +35,7 @@ const PlaygroundDetails: React.FC = () => {
 
         const fetchStadiumReviews = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/Stadium/GetStadiumReviews/${stadiumId}`);
+                const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/Stadium/Reviews/${stadiumId}`);
                 setReviews(response.data.reviews);
             } catch (error: any) {
                 toast.error('Error fetching stadium reviews:', error);
@@ -60,7 +60,7 @@ const PlaygroundDetails: React.FC = () => {
 
     const handleActivateClick = async () => {
         try {
-            await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Stadium/Active/${stadiumId}`);
+            await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Admin/ActiveStadium/${stadiumId}`);
             toast.success('Stadium activated successfully');
             setStadium((prevStadium) => prevStadium ? { ...prevStadium, approvalStatus: 1 } : prevStadium);
         } catch (error: any) {
@@ -70,7 +70,7 @@ const PlaygroundDetails: React.FC = () => {
 
     const handleUnactivateClick = async () => {
         try {
-            await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Stadium/UnActive/${stadiumId}`);
+            await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Admin/UnActiveStadium/${stadiumId}`);
             toast.success('Stadium deactivated successfully');
             setStadium((prevStadium) => prevStadium ? { ...prevStadium, approvalStatus: 0 } : prevStadium);
         } catch (error: any) {
@@ -80,7 +80,7 @@ const PlaygroundDetails: React.FC = () => {
 
     const handleDeleteClick = async () => {
         try {
-            await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/Stadium/Delete/${stadiumId}`);
+            await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/Stadium/${stadiumId}`);
             toast.success('Stadium deleted successfully');
             // Redirect or perform other actions after deletion
         } catch (error: any) {

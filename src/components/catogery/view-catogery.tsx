@@ -13,6 +13,7 @@ const ViewCategories: React.FC = () => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/Category`);
             setCategories(response.data);
+            console.log(response.data);
         } catch (error) {
             console.error('Error fetching categories:', error);
         } finally {
@@ -20,11 +21,21 @@ const ViewCategories: React.FC = () => {
         }
     };
 
-    const deleteCategory = async (id: string) => {
+    const deleteCategory = async (id: string, url: string) => {
         try {
-            await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/Category/Delete/${id}`);
-            setCategories(categories.filter(category => category.categoryId !== id));
+            console.log(url, id);
+            const deleteImageResponse = await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/Category/DeleteCategoryImage`, {
+                data: { categoryImageUrl: url }
+            });
+
+            if (deleteImageResponse.status === 200) {
+                await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/Category/${id}`);
+                setCategories(categories.filter(category => category.categoryId !== id));
+
+            }
+
         } catch (error: any) {
+            console.log(error);
             toast.error('Error deleting category: ' + error.message);
         }
     };
@@ -32,7 +43,7 @@ const ViewCategories: React.FC = () => {
     const handleUpdate = async () => {
         try {
             await fetchCategories(); // Refetch categories after update
-        } catch (error:any) {
+        } catch (error: any) {
             toast.error('Error updating category: ' + error.message);
         }
         setEditingCategory(null);
@@ -50,10 +61,10 @@ const ViewCategories: React.FC = () => {
         <div>
             <div className="bg-white p-5 w-[70vw]">
                 {editingCategory ? (
-                    <CategoryForm 
-                        category={editingCategory} 
-                        onUpdate={handleUpdate} 
-                        onCancel={handleCancel} 
+                    <CategoryForm
+                        category={editingCategory}
+                        onUpdate={handleUpdate}
+                        onCancel={handleCancel}
                     />
                 ) : (
                     <div>
@@ -83,7 +94,7 @@ const ViewCategories: React.FC = () => {
                                             <td className="border px-4 py-2 flex gap-2">
                                                 <button
                                                     className="bg-red-500 text-white px-4 py-2 rounded"
-                                                    onClick={() => deleteCategory(category.categoryId)}
+                                                    onClick={() => deleteCategory(category.categoryId, category.categoryImageUrl)}
                                                 >
                                                     Delete
                                                 </button>

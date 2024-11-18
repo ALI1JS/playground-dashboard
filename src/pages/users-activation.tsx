@@ -63,7 +63,7 @@ const UsersActivation: React.FC = () => {
         supplierCode,
       };
       const response = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/api/Owner/Active/${selectedOwnerId}`,
+        `${import.meta.env.VITE_BASE_URL}/api/Admin/ActiveOwner/${selectedOwnerId}`,
         activeBody,
         {
           headers: {

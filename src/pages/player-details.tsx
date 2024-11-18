@@ -56,6 +56,7 @@ const PlayerDetails: React.FC = () => {
                 setPlayer(res.data);
                 fetchStadiums(res.data.stadiumReservatation, res.data.ownerReservatation);
             } catch (error: any) {
+                console.log(error);
                 toast.error('Error fetching player details:', error);
             }
         };

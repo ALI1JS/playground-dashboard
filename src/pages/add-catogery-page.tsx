@@ -11,6 +11,7 @@ const AddCatogeryPage: React.FC = () => {
     setNavbarIsHidden(!navbarIsHidden);
   };
 
+  console.log("welcome");
 
   return (
     <div className="flex gap-5 w-[100vw] min-h-[100vh] relative">

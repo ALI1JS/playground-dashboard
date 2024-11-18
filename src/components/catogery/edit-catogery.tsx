@@ -80,7 +80,7 @@ const EditCategory: React.FC<CategoryFormProps> = ({ category,onUpdate, onCancel
 
         try {
             if (category) {
-                await axios.put(`${import.meta.env.VITE_BASE_URL}/api/Category/Update/${category.categoryId}`, updatedCategory, {
+                await axios.put(`${import.meta.env.VITE_BASE_URL}/api/Category/${category.categoryId}`, updatedCategory, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
