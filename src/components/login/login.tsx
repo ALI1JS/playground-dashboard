@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useAdmin } from "../../context/adminContext";
@@ -21,7 +21,6 @@ const Login: React.FC = () => {
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // Validate form fields
     if (!adminLoginData.email || !adminLoginData.password || errors.email || errors.password) {
       return; // Stop submission if there are errors
     }
@@ -35,7 +34,7 @@ const Login: React.FC = () => {
             "Content-Type": "application/json",
             origin: "*",
           },
-        },
+        }
       );
 
       if (response.status === 200) {
@@ -83,6 +82,17 @@ const Login: React.FC = () => {
     setErrors((prevErrors) => ({ ...prevErrors, [name]: errMsg }));
   };
 
+  useEffect(() => {
+    const currentPath = window.location.pathname;
+
+    if (currentPath === "/") {
+      const isAuthorized = !!sessionStorage.getItem("adminEmail");
+      if (isAuthorized) {
+        sessionStorage.removeItem("adminEmail");
+      }
+    }
+  }, [window.location.pathname]); // Run whenever the path changes
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="rounded px-8 py-6 mt-4 text-left bg-white shadow-lg md:w-1/3 lg:w-1/4">
@@ -121,5 +131,3 @@ const Login: React.FC = () => {
 };
 
 export default Login;
-// hawihubsa@gmail.com
-// Hawi@2030

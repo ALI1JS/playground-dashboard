@@ -52,6 +52,7 @@ export default function useChat() {
         }),
       ]);
 
+      console.log("owners", owners)
       const data = [...(owners?.data ?? []), ...(players?.data ?? [])].map((e) => ({
         ...e,
         key: v4(),

@@ -18,6 +18,8 @@ const Chat: React.FC = () => {
     updateConversation,
   } = useChat();
 
+  console.log("conversations", conversations)
+
   const navbarDisplayHandle = () => {
     setNavbarIsHidden(!navbarIsHidden);
   };
@@ -69,24 +71,25 @@ const Chat: React.FC = () => {
                   
                   "
                 >
-                  <img
-                    src={
-                      (item?.lastMessage?.owner || item?.lastMessage?.player)?.profilePictureUrl ||
-                      defaultAvatar
-                    }
-                    alt={(item?.lastMessage?.owner || item?.lastMessage?.player)?.userName}
-                    className={`w-10 h-10 rounded-full object-cover transition-all duration-200 ${
-                      conversation?.conversationId === item.conversationId
-                        ? "ring-4 ring-blue-500"
-                        : "ring-2 ring-gray-300"
-                    }`}
-                  />
+                  <div>
+                    <img
+                      src={
+                        (item?.lastMessage?.owner || item?.lastMessage?.player)?.profilePictureUrl ||
+                        defaultAvatar
+                      }
+                      alt={(item?.lastMessage?.owner || item?.lastMessage?.player)?.userName}
+                      className={`w-10 h-10 rounded-full object-cover transition-all duration-200 ${conversation?.conversationId === item.conversationId
+                          ? "ring-4 ring-blue-500"
+                          : "ring-2 ring-gray-300"
+                        }`}
+                    />
+                    <span className="font-bold capitalize text-sm">{item.lastMessage?.owner ? "owner" : "player"}</span>
+                  </div>
                   <div
-                    className={`text-center md:text-left text-sm font-bold transition-all duration-200 ${
-                      conversation?.conversationId === item.conversationId
+                    className={`text-center md:text-left text-sm font-bold transition-all duration-200 ${conversation?.conversationId === item.conversationId
                         ? "text-black"
                         : "text-gray-700"
-                    }`}
+                      }`}
                   >
                     <p>{(item?.lastMessage?.owner || item?.lastMessage?.player)?.userName}</p>
 
@@ -149,18 +152,16 @@ function MessageItem({ message, messages }: { message: MessageItem; messages: Me
         </div>
       )}
       <div
-        className={`p-3 rounded-md w-fit max-w-[80%] ${
-          message.adminToOwner || message.adminToPlayer
+        className={`p-3 rounded-md w-fit max-w-[80%] ${message.adminToOwner || message.adminToPlayer
             ? "bg-blue-500 ms-auto text-white"
             : "bg-gray-100 me-auto"
-        }`}
+          }`}
       >
         <div className="flex items-end gap-2">
           <span className="flex-1">{message.messageContent}</span>
           <span
-            className={`text-xs ${
-              message.adminToOwner || message.adminToPlayer ? "text-white/60" : "text-gray-500"
-            }`}
+            className={`text-xs ${message.adminToOwner || message.adminToPlayer ? "text-white/60" : "text-gray-500"
+              }`}
           >
             {moment(message.timestamp).fromNow()}
           </span>
