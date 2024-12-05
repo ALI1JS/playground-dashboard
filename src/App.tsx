@@ -10,6 +10,7 @@ import { FeedbackProvider } from "./context/FeedbackContext";
 const Router = createBrowserRouter(routers)
 
 function App() {
+    console.log("welcome in hawihub");
 
   return (
     <>
