@@ -33,7 +33,7 @@ const CatogeryForm = () => {
                 },
             });
 
-            console.log(response.data);
+            console.log("add category", response);
 
             if (response.status === 200) {
                 toast.success('Image uploaded successfully!');
@@ -42,6 +42,8 @@ const CatogeryForm = () => {
                 toast.error('Failed to upload image: ' + response.data.message);
             }
         } catch (error: any) {
+            console.log("add category", error);
+
             toast.error('Error uploading image: ' + error.message);
         }
     };
@@ -79,9 +81,11 @@ const CatogeryForm = () => {
                 setNameAr('');
                 setNameEn('');
             } else {
+                console.log(response.data)
                 toast.error('Failed to add category: ' + response.data.message);
             }
         } catch (error: any) {
+            console.log(error)
             toast.error('Error adding category: ' + error.message);
         }
     };

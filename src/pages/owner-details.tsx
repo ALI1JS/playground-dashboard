@@ -55,8 +55,9 @@ const OwnerDetailsPage: React.FC = () => {
       try {
         const [ownerResponse, playgroundsResponse] = await Promise.all([
           axios.get(`${import.meta.env.VITE_BASE_URL}/api/Owner/${id}`),
-          axios.get(`${import.meta.env.VITE_BASE_URL}/api/Owner/GetStadiums/${id}`),
+          axios.get(`${import.meta.env.VITE_BASE_URL}/api/Owner/Stadiums/${id}`),
         ]);
+
 
         if (ownerResponse.status === 200) {
           setOwner(ownerResponse.data);
@@ -71,6 +72,7 @@ const OwnerDetailsPage: React.FC = () => {
         }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
+        console.log(error)
         toast.error("Error fetching owner details: " + error.message);
       } finally {
         setLoading(false);

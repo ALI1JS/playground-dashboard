@@ -121,7 +121,7 @@ const OwnerRow: React.FC<OwnerProps> = ({
             </label>
           </div>
         )}
-        <Link to={`/chat/${id}`}>
+        <Link to={`/chat`}>
           <button className="hover:bg-yellow-600 bg-yellow-500 text-white font-bold cursor-pointer px-3 py-2 rounded">
             Chat
           </button>
