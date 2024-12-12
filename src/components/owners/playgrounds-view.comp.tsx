@@ -24,8 +24,8 @@ const PlayGroundView: React.FC<PlayGroundViewProps> = ({ playgrounds: initialPla
     const [expandedTimes, setExpandedTimes] = useState<{ dayOfWeek: number; startTime: string; endTime: string }[]>([]);
 
     const unActivateHandle = async (id: string) => {
-        try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Stadium/UnActive/${id}`);
+        try {                                                   
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Admin/UnActiveStadium/${id}`);
             if (response.status === 200) {
                 setPlaygrounds(prevPlaygrounds =>
                     prevPlaygrounds.map(playground =>
@@ -43,7 +43,7 @@ const PlayGroundView: React.FC<PlayGroundViewProps> = ({ playgrounds: initialPla
 
     const activateHandle = async (id: string) => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Stadium/Active/${id}`);
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/Admin/ActiveStadium/${id}`);
             if (response.status === 200) {
                 setPlaygrounds(prevPlaygrounds =>
                     prevPlaygrounds.map(playground =>
