@@ -32,7 +32,7 @@ const PlayGroundView: React.FC<PlayGroundViewProps> = ({ playgrounds: initialPla
                         playground.stadiumId === id ? { ...playground, approvalStatus: false } : playground
                     )
                 );
-                toast.success('Playground deactivated successfully');
+                toast.success('Playground unactivated successfully');
             } else {
                 toast.error('Failed to deactivate playground');
             }
