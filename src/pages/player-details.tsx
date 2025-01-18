@@ -105,13 +105,13 @@ const PlayerDetails: React.FC = () => {
     }
     const deleteHandle = async (id: string) => {
         try {
-          const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/Owner/Delete/${id}`);
+          const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/player/${id}`);
     
           if (res.status === 200) {
-            toast.success('The Owner deleted successfully');
+            toast.success('The Player deleted successfully');
             navigate(-1)
           } else {
-            throw new Error("The Owner isn't deleted, try again");
+            throw new Error("The Player isn't deleted, try again");
           }
         } catch (error: any) {
           toast.error(error.message);

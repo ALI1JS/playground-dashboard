@@ -52,7 +52,6 @@ export default function useChat() {
         }),
       ]);
 
-      console.log("owners", owners)
       const data = [...(owners?.data ?? []), ...(players?.data ?? [])].map((e) => ({
         ...e,
         key: v4(),
@@ -141,10 +140,12 @@ export default function useChat() {
   async function sendMessage(message: string, type: MessageType) {
     try {
       setIsSendingMessage(true);
-      await connection?.invoke(sendingTypes[type], {
+     const result = await connection?.invoke(sendingTypes[type], {
         ConversationId: conversation?.conversationId,
         Message: message,
       });
+
+      console.log("result", result);
 
       // await getConversation();
       setMessages((prev) => [
