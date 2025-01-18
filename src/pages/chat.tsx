@@ -18,14 +18,17 @@ const Chat: React.FC = () => {
     updateConversation,
   } = useChat();
 
-  console.log("conversations", conversations)
-
+  console.log("conversation", conversation);
   const navbarDisplayHandle = () => {
     setNavbarIsHidden(!navbarIsHidden);
   };
 
-  function sendMessageAndScrollToBottom(message: string, type: MessageType) {
-    sendMessage(message, type).then(() => {
+  function sendMessageAndScrollToBottom(message: string) {
+    if (!conversation || !conversation.type) {
+      console.error("Conversation or conversation type is undefined");
+      return;
+    }
+    sendMessage(message, conversation?.type).then(() => {
       setTimeout(() => {
         if (roomWrapper.current) {
           roomWrapper.current.scrollTo({
@@ -79,16 +82,16 @@ const Chat: React.FC = () => {
                       }
                       alt={(item?.lastMessage?.owner || item?.lastMessage?.player)?.userName}
                       className={`w-10 h-10 rounded-full object-cover transition-all duration-200 ${conversation?.conversationId === item.conversationId
-                          ? "ring-4 ring-blue-500"
-                          : "ring-2 ring-gray-300"
+                        ? "ring-4 ring-blue-500"
+                        : "ring-2 ring-gray-300"
                         }`}
                     />
                     <span className="font-bold capitalize text-sm">{item.lastMessage?.owner ? "owner" : "player"}</span>
                   </div>
                   <div
                     className={`text-center md:text-left text-sm font-bold transition-all duration-200 ${conversation?.conversationId === item.conversationId
-                        ? "text-black"
-                        : "text-gray-700"
+                      ? "text-black"
+                      : "text-gray-700"
                       }`}
                   >
                     <p>{(item?.lastMessage?.owner || item?.lastMessage?.player)?.userName}</p>
@@ -136,6 +139,8 @@ const Chat: React.FC = () => {
 
 function MessageItem({ message, messages }: { message: MessageItem; messages: MessageItem[] }) {
   const index = messages.findIndex((e) => message.messageId == e.messageId);
+
+  console.log("messages", messages)
   const isNewDay =
     moment(messages[index - 1]?.timestamp).format("YYYY-MM-DD") !=
     moment(message.timestamp).format("YYYY-MM-DD");
@@ -153,8 +158,8 @@ function MessageItem({ message, messages }: { message: MessageItem; messages: Me
       )}
       <div
         className={`p-3 rounded-md w-fit max-w-[80%] ${message.adminToOwner || message.adminToPlayer
-            ? "bg-blue-500 ms-auto text-white"
-            : "bg-gray-100 me-auto"
+          ? "bg-blue-500 ms-auto text-white"
+          : "bg-gray-100 me-auto"
           }`}
       >
         <div className="flex items-end gap-2">
@@ -186,7 +191,7 @@ function ChatFooter({ onClick, isSendingMessage }: any) {
       />
       <button
         onClick={() => {
-          onClick(messageInput, "owner");
+          onClick(messageInput);
           setMessageInput("");
         }}
         className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg disabled:opacity-50 disabled:cursor-no-drop"

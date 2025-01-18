@@ -141,7 +141,7 @@ export default function useChat() {
     try {
      
       setIsSendingMessage(true);
-      await connection?.invoke("SendMessageFromAdminToPlayer", {
+      await connection?.invoke(sendingTypes[type], {
         ConversationId: conversation?.conversationId,
         Message: message,
       });
