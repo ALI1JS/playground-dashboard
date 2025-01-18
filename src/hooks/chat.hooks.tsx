@@ -139,13 +139,12 @@ export default function useChat() {
 
   async function sendMessage(message: string, type: MessageType) {
     try {
+     
       setIsSendingMessage(true);
-     const result = await connection?.invoke(sendingTypes[type], {
+      await connection?.invoke("SendMessageFromAdminToPlayer", {
         ConversationId: conversation?.conversationId,
         Message: message,
       });
-
-      console.log("result", result);
 
       // await getConversation();
       setMessages((prev) => [
