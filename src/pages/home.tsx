@@ -10,7 +10,7 @@ import establishedConnection from "../utils/signal";
 const Dashboard: React.FC = () => {
   const [navbarIsHidden, setNavbarIsHidden] = useState(true);
   const { fetchOwners, totalOwners } = useContext(OwnersContext);
-
+  console.log("last update");
   const navbarDisplayHandle = () => {
     setNavbarIsHidden(!navbarIsHidden);
   };
